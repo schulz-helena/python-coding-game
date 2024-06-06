@@ -1,7 +1,7 @@
 import sys
 import turtle
 import time
-from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton
+from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 650
@@ -13,7 +13,6 @@ screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
 screen.colormode(255)
 screen.tracer(0)
 screen.bgcolor((255, 205, 178))
-
 
 GRID_SIZE = 50  
 
@@ -71,48 +70,59 @@ player.shapesize(1.5)
 player.color((120, 150, 100))
 player.penup()
 player.speed(0)
-player.goto(-320 + (1 * GRID_SIZE), 260 - (0 * GRID_SIZE))  
-player.direction = "down" 
+player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))  
 player.setheading(270)
+player.direction = "down" 
 
 def move_up():
     player.setheading(90)
-    player.forward(GRID_SIZE)
-    check_goal()
-    screen.bgcolor((255, 205, 178))
-    screen.update()
-    time.sleep(0.5)
+    player.direction = "up"
+    if can_move_forward():
+        player.forward(GRID_SIZE)
+        screen.bgcolor((255, 205, 178))
+        screen.update()
+        time.sleep(0.5)
+    else:
+        print("Verloren!")
 
 def move_down():
     player.setheading(270)
-    player.forward(GRID_SIZE)
-    check_goal()
-    screen.bgcolor((255, 205, 178))
-    screen.update()
-    time.sleep(0.5)
+    player.direction = "down"
+    if can_move_forward():
+        player.forward(GRID_SIZE)
+        screen.bgcolor((255, 205, 178))
+        screen.update()
+        time.sleep(0.5)
+    else:
+        print("Verloren!")
 
 def move_left():
     player.setheading(180)
-    player.forward(GRID_SIZE)
-    check_goal()
-    screen.bgcolor((255, 205, 178))
-    screen.update()
-    time.sleep(0.5)
+    player.direction = "left"
+    if can_move_forward():
+        player.forward(GRID_SIZE)
+        screen.bgcolor((255, 205, 178))
+        screen.update()
+        time.sleep(0.5)
+    else:
+        print("Verloren!")
 
 def move_right():
     player.setheading(0)
-    player.forward(GRID_SIZE)
-    check_goal()
-    screen.bgcolor((255, 205, 178))
-    screen.update()
-    time.sleep(0.5)
+    player.direction = "right"
+    if can_move_forward():
+        player.forward(GRID_SIZE)
+        screen.bgcolor((255, 205, 178))
+        screen.update()
+        time.sleep(0.5)
+    else:
+        print("Verloren!")
 
 def check_goal():
     next_x, next_y = player.position()
     grid_x = int((next_x + 320) / GRID_SIZE)
     grid_y = int((260 - next_y) / GRID_SIZE)
     if maze[grid_y][grid_x] == 3:
-        print("Goal reached!")
         return True
     
     return False
@@ -193,8 +203,24 @@ class CodeEditor(QWidget):
         code = self.textEdit.toPlainText()
         try:
             exec(code, globals())
+            if check_goal():
+                print("Level geschafft!")
+            else:
+                screen.bgcolor((255, 205, 178))
+                screen.update()
+                self.loose_popup()
+                player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))  
+                player.setheading(270)
+                player.direction = "down"
         except Exception as e:
             print(e)
+
+    def loose_popup(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("Ziel nicht erreicht")
+        msg.setText("Du hast das Ziel leider nicht erreicht. Versuche es nochmal!")
+        msg.setStandardButtons(QMessageBox.Retry)
+        x = msg.exec_()
 
 # Main game loop
 def main():
