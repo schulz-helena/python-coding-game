@@ -74,6 +74,8 @@ player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))
 player.setheading(270)
 player.direction = "down" 
 
+game_running = True
+
 def update_screen():
     screen.bgcolor((255, 205, 178))
     screen.update()
@@ -87,13 +89,6 @@ def check_goal():
         return True
     
     return False
-
-def move():
-    if can_move_forward():
-        player.forward(GRID_SIZE)
-        update_screen()
-    else:
-        print("Verloren!")
 
 def can_move_forward():
 
@@ -113,41 +108,55 @@ def can_move_forward():
     
     return (0 <= grid_x < len(maze[0]) and 0 <= grid_y < len(maze) and maze[grid_y][grid_x] == 0) or maze[grid_y][grid_x] == 3
 
+def move():
+    global game_running
+    if game_running:
+        if can_move_forward():
+            player.forward(GRID_SIZE)
+            update_screen()
+        else:
+            print("Verloren!")
+            game_running = False
+
 def rotate_left():
-    if player.direction == "up":
-        player.direction = "left"
-        player.setheading(180)
-        update_screen()
-    elif player.direction == "right":
-        player.direction = "up"
-        player.setheading(90)
-        update_screen()
-    elif player.direction == "down":
-        player.direction = "right"
-        player.setheading(0)
-        update_screen()
-    elif player.direction == "left":
-        player.direction = "down"
-        player.setheading(270)
-        update_screen()
+    global game_running
+    if game_running:
+        if player.direction == "up":
+            player.direction = "left"
+            player.setheading(180)
+            update_screen()
+        elif player.direction == "right":
+            player.direction = "up"
+            player.setheading(90)
+            update_screen()
+        elif player.direction == "down":
+            player.direction = "right"
+            player.setheading(0)
+            update_screen()
+        elif player.direction == "left":
+            player.direction = "down"
+            player.setheading(270)
+            update_screen()
 
 def rotate_right():
-    if player.direction == "up":
-        player.direction = "right"
-        player.setheading(0)
-        update_screen()
-    elif player.direction == "right":
-        player.direction = "down"
-        player.setheading(270)
-        update_screen()
-    elif player.direction == "down":
-        player.direction = "left"
-        player.setheading(180)
-        update_screen()
-    elif player.direction == "left":
-        player.direction = "up"
-        player.setheading(90)
-        update_screen()
+    global game_running
+    if game_running:
+        if player.direction == "up":
+            player.direction = "right"
+            player.setheading(0)
+            update_screen()
+        elif player.direction == "right":
+            player.direction = "down"
+            player.setheading(270)
+            update_screen()
+        elif player.direction == "down":
+            player.direction = "left"
+            player.setheading(180)
+            update_screen()
+        elif player.direction == "left":
+            player.direction = "up"
+            player.setheading(90)
+            update_screen()
 
 # PyQt5 Application
 class CodeEditor(QWidget):
@@ -169,25 +178,43 @@ class CodeEditor(QWidget):
         self.setGeometry(GAME_WIDTH + 10, 10, 380, SCREEN_HEIGHT)
     
     def run_code(self):
+        global game_running
+        game_running = True
         code = self.textEdit.toPlainText()
         try:
             exec(code, globals())
-            if check_goal():
-                print("Level geschafft!")
-            else:
+            print(game_running)
+            if not game_running:
                 screen.bgcolor((255, 205, 178))
                 screen.update()
-                self.loose_popup()
+                self.ran_into_wall_popup()
                 player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))  
                 player.setheading(270)
                 player.direction = "down"
+            else:
+                if check_goal():
+                    print("Level geschafft!")
+                else:
+                    screen.bgcolor((255, 205, 178))
+                    screen.update()
+                    self.goal_not_reached_popup()
+                    player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))  
+                    player.setheading(270)
+                    player.direction = "down"
         except Exception as e:
             print(e)
 
-    def loose_popup(self):
+    def goal_not_reached_popup(self):
         msg = QMessageBox()
         msg.setWindowTitle("Ziel nicht erreicht")
         msg.setText("Du hast das Ziel leider nicht erreicht. Versuche es nochmal!")
+        msg.setStandardButtons(QMessageBox.Retry)
+        x = msg.exec_()
+
+    def ran_into_wall_popup(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("Gegen die Wand gelaufen")
+        msg.setText("Du bist gegen die Wand gelaufen. Versuche es nochmal!")
         msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 
