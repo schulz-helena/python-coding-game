@@ -81,7 +81,7 @@ def update_screen():
     screen.update()
     time.sleep(0.5)
 
-def check_goal():
+def goal_reached():
     next_x, next_y = player.position()
     grid_x = int((next_x + 320) / GRID_SIZE)
     grid_y = int((260 - next_y) / GRID_SIZE)
@@ -115,7 +115,6 @@ def move():
             player.forward(GRID_SIZE)
             update_screen()
         else:
-            print("Verloren!")
             game_running = False
 
 def rotate_left():
@@ -183,7 +182,6 @@ class CodeEditor(QWidget):
         code = self.textEdit.toPlainText()
         try:
             exec(code, globals())
-            print(game_running)
             if not game_running:
                 screen.bgcolor((255, 205, 178))
                 screen.update()
@@ -192,8 +190,8 @@ class CodeEditor(QWidget):
                 player.setheading(270)
                 player.direction = "down"
             else:
-                if check_goal():
-                    print("Level geschafft!")
+                if goal_reached():
+                    self.won_popup()
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
@@ -216,6 +214,13 @@ class CodeEditor(QWidget):
         msg.setWindowTitle("Gegen die Wand gelaufen")
         msg.setText("Du bist gegen die Wand gelaufen. Versuche es nochmal!")
         msg.setStandardButtons(QMessageBox.Retry)
+        x = msg.exec_()
+
+    def won_popup(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("Gewonnen")
+        msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
+        msg.setStandardButtons(QMessageBox.Ok)
         x = msg.exec_()
 
 # Main game loop
