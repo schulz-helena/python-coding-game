@@ -3,20 +3,22 @@ import turtle
 import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
 
+
+# Setup screen:
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 650
 GAME_WIDTH = 800
+GRID_SIZE = 50
 
 screen = turtle.Screen()
 screen.title("Maze Game")
 screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
 screen.colormode(255)
 screen.tracer(0)
-screen.bgcolor((255, 205, 178))
-
-GRID_SIZE = 50  
+screen.bgcolor((255, 205, 178)) 
 
 
+# Setup and draw maze:
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
     [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0],
@@ -31,7 +33,6 @@ maze = [
     [1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0],
 ]
 
-# Draw the maze
 def draw_maze(maze):
     turtle.speed(0)
     turtle.penup()
@@ -64,6 +65,7 @@ def draw_maze(maze):
 draw_maze(maze)
 
 
+# Setup player:
 player = turtle.Turtle()
 player.shape("arrow")  
 player.shapesize(1.5)
@@ -74,6 +76,8 @@ player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))
 player.setheading(270)
 player.direction = "down" 
 
+
+# Helper variables and functions:
 game_running = True
 
 def update_screen():
@@ -81,6 +85,8 @@ def update_screen():
     screen.update()
     time.sleep(0.5)
 
+
+# Functions that are usable in code editor:
 def goal_reached():
     next_x, next_y = player.position()
     grid_x = int((next_x + 320) / GRID_SIZE)
@@ -91,7 +97,6 @@ def goal_reached():
     return False
 
 def can_move_forward():
-
     next_x, next_y = player.position()
     if player.direction == "up":
         next_y += GRID_SIZE
@@ -102,10 +107,8 @@ def can_move_forward():
     elif player.direction == "left":
         next_x -= GRID_SIZE
 
-
     grid_x = int((next_x + 320) / GRID_SIZE)
     grid_y = int((260 - next_y) / GRID_SIZE)
-    
     return (0 <= grid_x < len(maze[0]) and 0 <= grid_y < len(maze) and maze[grid_y][grid_x] == 0) or maze[grid_y][grid_x] == 3
 
 def move():
@@ -157,7 +160,8 @@ def rotate_right():
             player.setheading(90)
             update_screen()
 
-# PyQt5 Application
+
+# PyQt5 Application with code editor window:
 class CodeEditor(QWidget):
     def __init__(self):
         super().__init__()
@@ -223,7 +227,8 @@ class CodeEditor(QWidget):
         msg.setStandardButtons(QMessageBox.Ok)
         x = msg.exec_()
 
-# Main game loop
+
+# Main game loop:
 def main():
     screen.listen()
 
