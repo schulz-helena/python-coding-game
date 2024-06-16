@@ -74,49 +74,10 @@ player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))
 player.setheading(270)
 player.direction = "down" 
 
-def move_up():
-    player.setheading(90)
-    player.direction = "up"
-    if can_move_forward():
-        player.forward(GRID_SIZE)
-        screen.bgcolor((255, 205, 178))
-        screen.update()
-        time.sleep(0.5)
-    else:
-        print("Verloren!")
-
-def move_down():
-    player.setheading(270)
-    player.direction = "down"
-    if can_move_forward():
-        player.forward(GRID_SIZE)
-        screen.bgcolor((255, 205, 178))
-        screen.update()
-        time.sleep(0.5)
-    else:
-        print("Verloren!")
-
-def move_left():
-    player.setheading(180)
-    player.direction = "left"
-    if can_move_forward():
-        player.forward(GRID_SIZE)
-        screen.bgcolor((255, 205, 178))
-        screen.update()
-        time.sleep(0.5)
-    else:
-        print("Verloren!")
-
-def move_right():
-    player.setheading(0)
-    player.direction = "right"
-    if can_move_forward():
-        player.forward(GRID_SIZE)
-        screen.bgcolor((255, 205, 178))
-        screen.update()
-        time.sleep(0.5)
-    else:
-        print("Verloren!")
+def update_screen():
+    screen.bgcolor((255, 205, 178))
+    screen.update()
+    time.sleep(0.5)
 
 def check_goal():
     next_x, next_y = player.position()
@@ -130,9 +91,9 @@ def check_goal():
 def move():
     if can_move_forward():
         player.forward(GRID_SIZE)
-        screen.bgcolor((255, 205, 178))
-        screen.update()
-        time.sleep(0.5)
+        update_screen()
+    else:
+        print("Verloren!")
 
 def can_move_forward():
 
@@ -156,29 +117,37 @@ def rotate_left():
     if player.direction == "up":
         player.direction = "left"
         player.setheading(180)
+        update_screen()
     elif player.direction == "right":
         player.direction = "up"
         player.setheading(90)
+        update_screen()
     elif player.direction == "down":
         player.direction = "right"
         player.setheading(0)
+        update_screen()
     elif player.direction == "left":
         player.direction = "down"
         player.setheading(270)
+        update_screen()
 
 def rotate_right():
     if player.direction == "up":
         player.direction = "right"
         player.setheading(0)
+        update_screen()
     elif player.direction == "right":
         player.direction = "down"
         player.setheading(270)
+        update_screen()
     elif player.direction == "down":
         player.direction = "left"
         player.setheading(180)
+        update_screen()
     elif player.direction == "left":
         player.direction = "up"
         player.setheading(90)
+        update_screen()
 
 # PyQt5 Application
 class CodeEditor(QWidget):
