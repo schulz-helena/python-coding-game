@@ -200,9 +200,9 @@ class CodeEditor(QWidget):
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
-                    player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))  
-                    player.setheading(270)
-                    player.direction = "down"
+                    player.goto(-320 + (5 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
+                    player.setheading(0)
+                    player.direction = "right"
         except Exception as e:
             print(e)
 
