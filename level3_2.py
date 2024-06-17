@@ -185,7 +185,7 @@ class CodeEditor(QWidget):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
-        if re.search("for ", code):
+        if re.search("while ", code):
             paradigm_used = True
         else: paradigm_used = False
         try:
@@ -239,8 +239,8 @@ class CodeEditor(QWidget):
     
     def goal_no_win_popup(self):
         msg = QMessageBox()
-        msg.setWindowTitle("Versuche es mit einer For-Schleife")
-        msg.setText("Du hast das Ziel erreicht, aber keine For-Schleife benutzt. Versuche es nochmal!")
+        msg.setWindowTitle("Versuche es mit einer While-Schleife")
+        msg.setText("Du hast das Ziel erreicht, aber keine While-Schleife benutzt. Versuche es nochmal!")
         msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 

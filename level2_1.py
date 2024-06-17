@@ -2,6 +2,7 @@ import sys
 import turtle
 import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
+import re
 
 
 # Setup screen:
@@ -184,6 +185,9 @@ class CodeEditor(QWidget):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
+        if re.search("for ", code):
+            paradigm_used = True
+        else: paradigm_used = False
         try:
             exec(code, globals())
             if not game_running:
@@ -195,7 +199,13 @@ class CodeEditor(QWidget):
                 player.direction = "right"
             else:
                 if goal_reached():
-                    self.won_popup()
+                    if paradigm_used:
+                        self.won_popup()
+                    else:
+                        self.goal_no_win_popup()
+                        player.goto(-320 + (1 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
+                        player.setheading(0)
+                        player.direction = "right"
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
@@ -225,6 +235,13 @@ class CodeEditor(QWidget):
         msg.setWindowTitle("Gewonnen")
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
         msg.setStandardButtons(QMessageBox.Ok)
+        x = msg.exec_()
+    
+    def goal_no_win_popup(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("Versuche es mit einer For-Schleife")
+        msg.setText("Du hast das Ziel erreicht, aber keine For-Schleife benutzt. Versuche es nochmal!")
+        msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 
 

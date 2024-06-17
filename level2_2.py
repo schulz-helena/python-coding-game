@@ -2,6 +2,7 @@ import sys
 import turtle
 import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
+import re
 
 
 # Setup screen:
@@ -184,6 +185,9 @@ class CodeEditor(QWidget):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
+        if re.search("for ", code):
+            paradigm_used = True
+        else: paradigm_used = False
         try:
             exec(code, globals())
             if not game_running:
@@ -192,17 +196,23 @@ class CodeEditor(QWidget):
                 self.ran_into_wall_popup()
                 player.goto(-320 + (12 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
                 player.setheading(90)
-                player.direction = "up"
+                player.direction = "up" 
             else:
                 if goal_reached():
-                    self.won_popup()
+                    if paradigm_used:
+                        self.won_popup()
+                    else:
+                        self.goal_no_win_popup()
+                        player.goto(-320 + (12 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                        player.setheading(90)
+                        player.direction = "up" 
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
                     player.goto(-320 + (12 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
                     player.setheading(90)
-                    player.direction = "up"
+                    player.direction = "up" 
         except Exception as e:
             print(e)
 
@@ -225,6 +235,13 @@ class CodeEditor(QWidget):
         msg.setWindowTitle("Gewonnen")
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
         msg.setStandardButtons(QMessageBox.Ok)
+        x = msg.exec_()
+
+    def goal_no_win_popup(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("Versuche es mit einer For-Schleife")
+        msg.setText("Du hast das Ziel erreicht, aber keine For-Schleife benutzt. Versuche es nochmal!")
+        msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 
 

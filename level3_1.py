@@ -22,15 +22,15 @@ screen.bgcolor((255, 205, 178))
 # Setup and draw maze:
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 
@@ -73,7 +73,7 @@ player.shapesize(1.5)
 player.color((120, 150, 100))
 player.penup()
 player.speed(0)
-player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+player.goto(-320 + (1 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
 player.setheading(0)
 player.direction = "right" 
 
@@ -185,7 +185,7 @@ class CodeEditor(QWidget):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
-        if re.search("for ", code):
+        if re.search("while ", code):
             paradigm_used = True
         else: paradigm_used = False
         try:
@@ -194,25 +194,25 @@ class CodeEditor(QWidget):
                 screen.bgcolor((255, 205, 178))
                 screen.update()
                 self.ran_into_wall_popup()
-                player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                player.goto(-320 + (1 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                 player.setheading(0)
-                player.direction = "right" 
+                player.direction = "right"
             else:
                 if goal_reached():
                     if paradigm_used:
                         self.won_popup()
                     else:
                         self.goal_no_win_popup()
-                        player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                        player.goto(-320 + (1 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                         player.setheading(0)
-                        player.direction = "right" 
+                        player.direction = "right"
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
-                    player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                    player.goto(-320 + (1 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                     player.setheading(0)
-                    player.direction = "right" 
+                    player.direction = "right"
         except Exception as e:
             print(e)
 
@@ -239,8 +239,8 @@ class CodeEditor(QWidget):
     
     def goal_no_win_popup(self):
         msg = QMessageBox()
-        msg.setWindowTitle("Versuche es mit einer For-Schleife")
-        msg.setText("Du hast das Ziel erreicht, aber keine For-Schleife benutzt. Versuche es nochmal!")
+        msg.setWindowTitle("Versuche es mit einer While-Schleife")
+        msg.setText("Du hast das Ziel erreicht, aber keine While-Schleife benutzt. Versuche es nochmal!")
         msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 

@@ -22,15 +22,15 @@ screen.bgcolor((255, 205, 178))
 # Setup and draw maze:
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+    [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 
@@ -73,9 +73,9 @@ player.shapesize(1.5)
 player.color((120, 150, 100))
 player.penup()
 player.speed(0)
-player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
-player.setheading(0)
-player.direction = "right" 
+player.goto(-320 + (0 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+player.setheading(270)
+player.direction = "down" 
 
 
 # Helper variables and functions:
@@ -194,25 +194,25 @@ class CodeEditor(QWidget):
                 screen.bgcolor((255, 205, 178))
                 screen.update()
                 self.ran_into_wall_popup()
-                player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
-                player.setheading(0)
-                player.direction = "right" 
+                player.goto(-320 + (0 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                player.setheading(270)
+                player.direction = "down" 
             else:
                 if goal_reached():
                     if paradigm_used:
                         self.won_popup()
                     else:
                         self.goal_no_win_popup()
-                        player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
-                        player.setheading(0)
-                        player.direction = "right" 
+                        player.goto(-320 + (0 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                        player.setheading(270)
+                        player.direction = "down" 
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
-                    player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
-                    player.setheading(0)
-                    player.direction = "right" 
+                    player.goto(-320 + (0 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                    player.setheading(270)
+                    player.direction = "down"  
         except Exception as e:
             print(e)
 
