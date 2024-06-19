@@ -107,10 +107,16 @@ def can_move_forward():
     elif player.direction == "left":
         next_x -= GRID_SIZE
 
-    grid_x = int((next_x + 320) / GRID_SIZE)
-    grid_y = int((260 - next_y) / GRID_SIZE)
-    return (0 <= grid_x < len(maze[0]) and 0 <= grid_y < len(maze) and maze[grid_y][grid_x] == 0) or maze[grid_y][grid_x] == 3
+    # Convert floating-point position to grid coordinates
+    grid_x = round((next_x + 320) / GRID_SIZE)
+    grid_y = round((260 - next_y) / GRID_SIZE)
 
+    # Ensure grid coordinates are within the maze boundaries
+    if 0 <= grid_x < len(maze[0]) and 0 <= grid_y < len(maze):
+        return maze[grid_y][grid_x] == 0 or maze[grid_y][grid_x] == 3
+    else:
+        return False
+    
 def move():
     global game_running
     if game_running:
