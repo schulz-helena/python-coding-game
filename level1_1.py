@@ -231,6 +231,9 @@ class CodeEditor(QWidget):
         msg.setWindowTitle("Gewonnen")
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
         msg.setStandardButtons(QMessageBox.Ok)
+
+        with open("level_1.1.status", "w") as f:
+            f.write("COMPLETED")
         x = msg.exec_()
 
 
