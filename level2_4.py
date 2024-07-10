@@ -90,8 +90,8 @@ def update_screen():
 # Functions that are usable in code editor:
 def goal_reached():
     next_x, next_y = player.position()
-    grid_x = int((next_x + 320) / GRID_SIZE)
-    grid_y = int((260 - next_y) / GRID_SIZE)
+    grid_x = round((next_x + 320) / GRID_SIZE)
+    grid_y = round((260 - next_y) / GRID_SIZE)
     if maze[grid_y][grid_x] == 3:
         return True
     
