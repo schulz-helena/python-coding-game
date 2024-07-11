@@ -186,7 +186,7 @@ class CodeEditor(QWidget):
         self.setLayout(layout)
         
         self.setWindowTitle('Code Editor')
-        self.setGeometry(GAME_WIDTH + 10, 10, 380, SCREEN_HEIGHT)
+        self.setGeometry(GAME_WIDTH + 10, 10, 480, SCREEN_HEIGHT)
     
     def run_code(self):
         global game_running

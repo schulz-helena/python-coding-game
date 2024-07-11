@@ -230,7 +230,7 @@ class CodeEditor(QWidget):
         self.textEdit = QTextEdit(self)
         solution = "while not goal_reached():\n\trotate_left()\n\tmove()\n\tcoins.append(pick_up_coin())\n\tcoins.sort()\n\tif len(coins) == 8:\n\t\tsmallestCoin = coins[0]\n\trotate_right()\n\tmove()"
         defaultText = ""
-        self.textEdit.setPlainText(solution)
+        self.textEdit.setPlainText(defaultText)
         self.runButton = QPushButton('Run Code', self)
         self.runButton.clicked.connect(self.run_code)
         self.label2 = QLabel(self)
@@ -247,7 +247,7 @@ class CodeEditor(QWidget):
         self.setLayout(layout)
         
         self.setWindowTitle('Code Editor')
-        self.setGeometry(GAME_WIDTH + 10, 10, 380, SCREEN_HEIGHT)
+        self.setGeometry(GAME_WIDTH + 10, 10, 480, SCREEN_HEIGHT)
     
     def run_code(self):
         global maze
