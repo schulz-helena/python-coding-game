@@ -3,6 +3,7 @@ import turtle
 import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
 import random
+import os
 
 # Setup screen:
 SCREEN_WIDTH = 800
@@ -113,8 +114,8 @@ def update_screen():
 # Functions that are usable in code editor:
 def goal_reached():
     next_x, next_y = player.position()
-    grid_x = int((next_x + 320) / GRID_SIZE)
-    grid_y = int((260 - next_y) / GRID_SIZE)
+    grid_x = round((next_x + 320) / GRID_SIZE)
+    grid_y = round((260 - next_y) / GRID_SIZE)
     if maze[grid_y][grid_x] == 3:
         return True
     
@@ -197,8 +198,8 @@ collected = 0
 
 def collect_coin():
     next_x, next_y = player.position()
-    grid_x = int((next_x + 320) / GRID_SIZE)
-    grid_y = int((260 - next_y) / GRID_SIZE)
+    grid_x = round((next_x + 320) / GRID_SIZE)
+    grid_y = round((260 - next_y) / GRID_SIZE)
     if maze[grid_y][grid_x] == -1:
         maze[grid_y][grid_x] = 0
         draw_maze(maze)
@@ -208,10 +209,10 @@ def collect_coin():
         
 
 
-def is_onCoin():
+def is_on_coin():
     next_x, next_y = player.position()
-    grid_x = int((next_x + 320) / GRID_SIZE)
-    grid_y = int((260 - next_y) / GRID_SIZE)
+    grid_x = round((next_x + 320) / GRID_SIZE)
+    grid_y = round((260 - next_y) / GRID_SIZE)
     if maze[grid_y][grid_x] == -1:
         return True
     
@@ -223,6 +224,12 @@ class CodeEditor(QWidget):
     
     def initUI(self):
         self.textEdit = QTextEdit(self)
+        if os.path.exists(os.path.join("saved_code", "code5_2.txt")):
+            with open(os.path.join("saved_code", "code5_2.txt"), "r") as f:
+                defaultText = f.read()
+        else:
+            defaultText = ""
+        self.textEdit.setPlainText(defaultText)
         self.runButton = QPushButton('Run Code', self)
         self.runButton.clicked.connect(self.run_code)
         
@@ -232,21 +239,25 @@ class CodeEditor(QWidget):
         self.setLayout(layout)
         
         self.setWindowTitle('Code Editor')
-        self.setGeometry(GAME_WIDTH + 10, 10, 380, SCREEN_HEIGHT)
+        self.setGeometry(GAME_WIDTH + 10, 10, 480, SCREEN_HEIGHT)
     
     def run_code(self):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
+        if not os.path.exists("saved_code"):
+            os.makedirs("saved_code")
+        with open(os.path.join("saved_code", "code5_2.txt"), "w") as f:
+            f.write(code)
         try:
             exec(code, globals())
             if not game_running:
                 screen.bgcolor((255, 205, 178))
                 screen.update()
                 self.ran_into_wall_popup()
-                player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
-                player.setheading(0)
-                player.direction = "right"
+                player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE)) 
+                player.setheading(270)
+                player.direction = "down" 
             else:
                 if goal_reached():
                     self.won_popup()
@@ -254,9 +265,9 @@ class CodeEditor(QWidget):
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
-                    player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
-                    player.setheading(0)
-                    player.direction = "right"
+                    player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))
+                    player.setheading(270)
+                    player.direction = "down" 
     
         except Exception as e:
             print(e)
