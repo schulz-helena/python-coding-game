@@ -11,7 +11,9 @@ status_files = [
     "level_1.1.status", "level_1.2.status", "level_1.3.status",
     "level_2.1.status", "level_2.2.status", "level_2.3.status", "level_2.4.status",
     "level_3.1.status", "level_3.2.status",
-    "level_4.1.status", "level_4.2.status", "level_5.1.status"
+    "level_4.1.status", "level_4.2.status", 
+    "level_5.1.status", "level_5.2.status",
+    "level_6.1.status", "level_6.2.status", "level_6.3.status", "level_6.4.status"," level_6.5.status"
 ]
 
 # Function to delete status files
@@ -50,19 +52,40 @@ def stop_script(script_name):
     else:
         print("Warning", f"{script_name} is not running")
 
-
 # Create the main window
 root = tk.Tk()
 root.title("Python Learning UI")
 root.geometry("400x700")  # Set the window size
 
+# Create a Canvas widget and a Scrollbar widget
+canvas = tk.Canvas(root)
+scrollbar = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
+scrollable_frame = tk.Frame(canvas)
+
+# Function to configure the scroll region of the canvas
+def configure_canvas(event):
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+# Bind the configure event to the scrollable frame
+scrollable_frame.bind("<Configure>", configure_canvas)
+
+# Create a window inside the canvas to hold the scrollable frame
+canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+
+# Configure the canvas to use the scrollbar
+canvas.configure(yscrollcommand=scrollbar.set)
+
+# Pack the canvas and scrollbar widgets
+canvas.pack(side="left", fill="both", expand=True)
+scrollbar.pack(side="right", fill="y")
+
 # Function to create a script control frame
 def create_script_control_frame(level_name, script_path, status_file):
-    frame = tk.Frame(root)
-    frame.pack(pady=10)
+    frame = tk.Frame(scrollable_frame)
+    frame.pack(pady=5)
 
     label = tk.Label(frame, text=level_name)
-    label.pack(side=tk.LEFT, padx=10)
+    label.pack(side=tk.LEFT, padx=50)
 
     start_button = tk.Button(frame, text="Start", command=lambda: start_script(script_path, status_file, check_label))
     start_button.pack(side=tk.LEFT, padx=5)
@@ -89,6 +112,12 @@ create_script_control_frame("Level 3.2", "level3_2.py", "level_3.2.status")
 create_script_control_frame("Level 4.1", "level4_1.py", "level_4.1.status")
 create_script_control_frame("Level 4.2", "level4_2.py", "level_4.2.status")
 create_script_control_frame("Level 5.1", "level5_1.py", "level_5.1.status")
+create_script_control_frame("Level 5.2", "level5_2.py", "level_5.2.status")
+create_script_control_frame("Level 6.1", "level6_1.py", "level_6.1.status")
+create_script_control_frame("Level 6.2", "level6_2.py", "level_6.2.status")
+create_script_control_frame("Level 6.3", "level6_3.py", "level_6.3.status")
+create_script_control_frame("Level 6.4", "level6_4.py", "level_6.4.status")
+create_script_control_frame("Level 6.5", "level6_5.py", "level_6.5.status")
 
 # Run the Tkinter event loop
 root.mainloop()

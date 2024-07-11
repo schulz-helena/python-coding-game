@@ -58,8 +58,7 @@ def draw_maze(maze):
             screen_y = 280 - (y * GRID_SIZE)
             if maze[y][x] == 1:
                 turtle.goto(screen_x, screen_y)
-                turtle.color((229, 152, 155))
-                turtle.pendown()
+                turtle.color((229, 152, 155))          
                 turtle.begin_fill()
                 turtle.pencolor((150,150,150))
                 for _ in range(4):
@@ -70,7 +69,6 @@ def draw_maze(maze):
             if maze[y][x] == 3:
                 turtle.goto(screen_x, screen_y)
                 turtle.color((255, 183, 0))
-                turtle.pendown()
                 turtle.begin_fill()
                 turtle.pencolor((150,150,150))
                 for _ in range(4):
