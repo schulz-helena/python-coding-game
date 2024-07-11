@@ -191,7 +191,7 @@ class CodeEditor(QWidget):
     
     def initUI(self):
         self.textEdit = QTextEdit(self)
-        solution = ""
+        solution = "while not goal_reached():\n\tif can_move_forward():\n\t\tmove()\n\telse:\n\t\trotate_left()"
         if os.path.exists(os.path.join("saved_code", "code4_2.txt")):
             with open(os.path.join("saved_code", "code4_2.txt"), "r") as f:
                 defaultText = f.read()

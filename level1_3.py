@@ -189,7 +189,7 @@ class CodeEditor(QWidget):
     
     def initUI(self):
         self.textEdit = QTextEdit(self)
-        solution = ""
+        solution = "move()\nrotate_left()\nmove()\nrotate_right()\nmove()\nmove()\nrotate_right()\nmove()\nmove()\nrotate_right()\nmove()\nrotate_left()\nmove()"
         if os.path.exists(os.path.join("saved_code", "code1_3.txt")):
             with open(os.path.join("saved_code", "code1_3.txt"), "r") as f:
                 defaultText = f.read()
