@@ -99,6 +99,7 @@ player.direction = "right"
 game_running = True
 coins = []
 smallestCoin = None
+list_label = None
 
 def update_screen():
     screen.bgcolor((255, 205, 178))
@@ -108,6 +109,7 @@ def update_screen():
 
 # Functions that are usable in code editor:
 def goal_reached():
+    list_label.setText(f"coins = {coins}")
     next_x, next_y = player.position()
     # Convert floating-point position to grid coordinates
     grid_x = round((next_x + 320) / GRID_SIZE)
@@ -118,6 +120,7 @@ def goal_reached():
     return False
 
 def can_move_forward():
+    list_label.setText(f"coins = {coins}")
     next_x, next_y = player.position()
     if player.direction == "up":
         next_y += GRID_SIZE
@@ -139,6 +142,7 @@ def can_move_forward():
         return False
 
 def is_onCoin():
+    list_label.setText(f"coins = {coins}")
     next_x, next_y = player.position()
     grid_x = round((next_x + 320) / GRID_SIZE)
     grid_y = round((260 - next_y) / GRID_SIZE)
@@ -147,6 +151,7 @@ def is_onCoin():
     return False
 
 def pick_up_coin():
+    list_label.setText(f"coins = {coins}")
     next_x, next_y = player.position()
     grid_x = round((next_x + 320) / GRID_SIZE)
     grid_y = round((260 - next_y) / GRID_SIZE)
@@ -157,6 +162,7 @@ def pick_up_coin():
         return coin_id
     
 def move():
+    list_label.setText(f"coins = {coins}")
     global game_running
     if game_running:
         if can_move_forward():
@@ -166,6 +172,7 @@ def move():
             game_running = False
 
 def rotate_left():
+    list_label.setText(f"coins = {coins}")
     global game_running
     if game_running:
         if player.direction == "up":
@@ -186,6 +193,7 @@ def rotate_left():
             update_screen()
 
 def rotate_right():
+    list_label.setText(f"coins = {coins}")
     global game_running
     if game_running:
         if player.direction == "up":
@@ -206,6 +214,7 @@ def rotate_right():
             update_screen()
 
 
+
 # PyQt5 Application with code editor window:
 class CodeEditor(QWidget):
     def __init__(self):
@@ -213,20 +222,27 @@ class CodeEditor(QWidget):
         self.initUI()
     
     def initUI(self):
+        global list_label
         self.label = QLabel(self)
         self.label.setText("Speichere die kleinste Münze in der Variable, bevor du das Ziel erreichst!")
         self.label.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
         self.label.setWordWrap(True)
         self.textEdit = QTextEdit(self)
-        solution = "# Diese Zeilen bitte nicht löschen:\ncoins = []\nsmallestCoin = None\n\nwhile not goal_reached():\n\trotate_left()\n\tmove()\n\tcoins.append(pick_up_coin())\n\tcoins.sort()\n\tif len(coins) == 8:\n\t\tsmallestCoin = coins[0]\n\trotate_right()\n\tmove()"
-        defaultText = "# Diese Zeilen bitte nicht löschen:\ncoins = []\nsmallestCoin = None"
-        self.textEdit.setPlainText(defaultText)
+        solution = "while not goal_reached():\n\trotate_left()\n\tmove()\n\tcoins.append(pick_up_coin())\n\tcoins.sort()\n\tif len(coins) == 8:\n\t\tsmallestCoin = coins[0]\n\trotate_right()\n\tmove()"
+        defaultText = ""
+        self.textEdit.setPlainText(solution)
         self.runButton = QPushButton('Run Code', self)
         self.runButton.clicked.connect(self.run_code)
+        self.label2 = QLabel(self)
+        self.label2.setText("coins = []")
+        self.label2.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
+        self.label2.setWordWrap(True)
+        list_label = self.label2
         
         layout = QVBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(self.textEdit)
+        layout.addWidget(self.label2)
         layout.addWidget(self.runButton)
         self.setLayout(layout)
         
@@ -238,7 +254,9 @@ class CodeEditor(QWidget):
         global game_running
         game_running = True
         global coins
+        coins = []
         global smallestCoin
+        smallestCoin = None
         code = self.textEdit.toPlainText()
         try:
             exec(code, globals())
@@ -246,6 +264,7 @@ class CodeEditor(QWidget):
                 paradigm_used = True
             else: paradigm_used = False
             if not game_running:
+                self.label2.setText(f"coins = {coins}")
                 screen.bgcolor((255, 205, 178))
                 screen.update()
                 self.ran_into_wall_popup()
@@ -254,18 +273,22 @@ class CodeEditor(QWidget):
                 player.direction = "right"
                 draw_maze(original_maze)
                 maze = copy.deepcopy(original_maze)
+                self.label2.setText("coins = []")
             else:
                 if goal_reached():
                     if paradigm_used:
                         self.won_popup()
                     else:
+                        self.label2.setText(f"coins = {coins}")
                         self.goal_no_win_popup()
                         player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
                         player.setheading(0)
                         player.direction = "right"
                         draw_maze(original_maze)
                         maze = copy.deepcopy(original_maze)
+                        self.label2.setText("coins = []")
                 else:
+                    self.label2.setText(f"coins = {coins}")
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
@@ -274,6 +297,7 @@ class CodeEditor(QWidget):
                     player.direction = "right"
                     draw_maze(original_maze)
                     maze = copy.deepcopy(original_maze)
+                    self.label2.setText("coins = []")
         except Exception as e:
             print(e)
 
