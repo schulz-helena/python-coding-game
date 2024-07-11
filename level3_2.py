@@ -13,7 +13,7 @@ GAME_WIDTH = 800
 GRID_SIZE = 50
 
 screen = turtle.Screen()
-screen.title("Maze Game")
+screen.title("Level 3.2")
 screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
 screen.colormode(255)
 screen.tracer(0)
@@ -47,6 +47,18 @@ def draw_maze(maze):
                 turtle.color((229, 152, 155))
                 turtle.pendown()
                 turtle.begin_fill()
+                turtle.pencolor((150,150,150))
+                for _ in range(4):
+                    turtle.forward(GRID_SIZE)
+                    turtle.right(90)
+                turtle.end_fill()
+                turtle.penup()
+            if maze[y][x] == 0:
+                turtle.goto(screen_x, screen_y)
+                turtle.color((255, 205, 178))
+                turtle.pendown()
+                turtle.begin_fill()
+                turtle.pencolor((150,150,150))
                 for _ in range(4):
                     turtle.forward(GRID_SIZE)
                     turtle.right(90)
@@ -57,6 +69,7 @@ def draw_maze(maze):
                 turtle.color((255, 183, 0))
                 turtle.pendown()
                 turtle.begin_fill()
+                turtle.pencolor((150,150,150))
                 for _ in range(4):
                     turtle.forward(GRID_SIZE)
                     turtle.right(90)
@@ -252,8 +265,14 @@ class CodeEditor(QWidget):
         msg = QMessageBox()
         msg.setWindowTitle("Gewonnen")
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
-        msg.setStandardButtons(QMessageBox.Ok)
-        x = msg.exec_()
+        close_button = msg.addButton("Level beenden", QMessageBox.AcceptRole)
+
+        with open("level_3.2.status", "w") as f:
+            f.write("COMPLETED")
+
+        msg.exec_()
+        if msg.clickedButton() == close_button:
+            sys.exit()
     
     def goal_no_win_popup(self):
         msg = QMessageBox()

@@ -2,9 +2,7 @@ import sys
 import turtle
 import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
-import re
-import os
-
+import random
 
 # Setup screen:
 SCREEN_WIDTH = 800
@@ -13,7 +11,7 @@ GAME_WIDTH = 800
 GRID_SIZE = 50
 
 screen = turtle.Screen()
-screen.title("Level 2.2")
+screen.title("Level 5.1")
 screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
 screen.colormode(255)
 screen.tracer(0)
@@ -23,19 +21,35 @@ screen.bgcolor((255, 205, 178))
 # Setup and draw maze:
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 
+def replace_zeros_with_negatives(maze, count):
+    # Find all positions of 0 in the maze
+    zero_positions = [(i, j) for i, row in enumerate(maze) for j, value in enumerate(row) if value == 0]
+    
+
+    # Randomly select the positions to replace
+    positions_to_replace = random.sample(zero_positions, count)
+
+    # Replace the selected positions with -1
+    for i, j in positions_to_replace:
+        maze[i][j] = -1
+
+    return maze
+
+
 def draw_maze(maze):
+    turtle.clear()
     turtle.speed(0)
     turtle.penup()
     for y in range(len(maze)):
@@ -45,17 +59,6 @@ def draw_maze(maze):
             if maze[y][x] == 1:
                 turtle.goto(screen_x, screen_y)
                 turtle.color((229, 152, 155))
-                turtle.pendown()
-                turtle.begin_fill()
-                turtle.pencolor((150,150,150))
-                for _ in range(4):
-                    turtle.forward(GRID_SIZE)
-                    turtle.right(90)
-                turtle.end_fill()
-                turtle.penup()
-            if maze[y][x] == 0:
-                turtle.goto(screen_x, screen_y)
-                turtle.color((255, 205, 178))
                 turtle.pendown()
                 turtle.begin_fill()
                 turtle.pencolor((150,150,150))
@@ -75,9 +78,18 @@ def draw_maze(maze):
                     turtle.right(90)
                 turtle.end_fill()
                 turtle.penup()
+            if maze[y][x] == -1:
+                turtle.goto(screen_x + GRID_SIZE / 2, screen_y - GRID_SIZE / 2)
+                turtle.color((255, 255, 0))
+                turtle.pendown()
+                turtle.begin_fill()
+                turtle.circle(GRID_SIZE / 4)
+                turtle.end_fill()
+                turtle.penup()
     turtle.hideturtle()
 
-draw_maze(maze)
+mazeWithNegatives = replace_zeros_with_negatives(maze, 2)
+draw_maze(mazeWithNegatives)
 
 
 # Setup player:
@@ -87,9 +99,9 @@ player.shapesize(1.5)
 player.color((120, 150, 100))
 player.penup()
 player.speed(0)
-player.goto(-320 + (12 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
-player.setheading(90)
-player.direction = "up" 
+player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
+player.setheading(0)
+player.direction = "right" 
 
 
 # Helper variables and functions:
@@ -103,9 +115,16 @@ def update_screen():
 
 # Functions that are usable in code editor:
 def goal_reached():
+    global collected
+    if collected == 2:
+        return True
+    
+    return False
+
+def end_reached():
     next_x, next_y = player.position()
-    grid_x = round((next_x + 320) / GRID_SIZE)
-    grid_y = round((260 - next_y) / GRID_SIZE)
+    grid_x = int((next_x + 320) / GRID_SIZE)
+    grid_y = int((260 - next_y) / GRID_SIZE)
     if maze[grid_y][grid_x] == 3:
         return True
     
@@ -128,10 +147,10 @@ def can_move_forward():
 
     # Ensure grid coordinates are within the maze boundaries
     if 0 <= grid_x < len(maze[0]) and 0 <= grid_y < len(maze):
-        return maze[grid_y][grid_x] == 0 or maze[grid_y][grid_x] == 3
+        return maze[grid_y][grid_x] == 0 or maze[grid_y][grid_x] == 3 or maze[grid_y][grid_x] == -1
     else:
         return False
-    
+
 def move():
     global game_running
     if game_running:
@@ -181,7 +200,30 @@ def rotate_right():
             player.setheading(90)
             update_screen()
 
+global collected
+collected = 0
 
+
+def collect_coin():
+    next_x, next_y = player.position()
+    grid_x = int((next_x + 320) / GRID_SIZE)
+    grid_y = int((260 - next_y) / GRID_SIZE)
+    if maze[grid_y][grid_x] == -1:
+        maze[grid_y][grid_x] = 0
+        draw_maze(mazeWithNegatives)
+        global collected
+        collected += 1
+        update_screen()
+        
+
+
+def is_onCoin():
+    next_x, next_y = player.position()
+    grid_x = int((next_x + 320) / GRID_SIZE)
+    grid_y = int((260 - next_y) / GRID_SIZE)
+    if maze[grid_y][grid_x] == -1:
+        return True
+    
 # PyQt5 Application with code editor window:
 class CodeEditor(QWidget):
     def __init__(self):
@@ -190,13 +232,6 @@ class CodeEditor(QWidget):
     
     def initUI(self):
         self.textEdit = QTextEdit(self)
-        solution = ""
-        if os.path.exists(os.path.join("saved_code", "code2_2.txt")):
-            with open(os.path.join("saved_code", "code2_2.txt"), "r") as f:
-                defaultText = f.read()
-        else:
-            defaultText = ""
-        self.textEdit.setPlainText(defaultText)
         self.runButton = QPushButton('Run Code', self)
         self.runButton.clicked.connect(self.run_code)
         
@@ -206,51 +241,45 @@ class CodeEditor(QWidget):
         self.setLayout(layout)
         
         self.setWindowTitle('Code Editor')
-        self.setGeometry(GAME_WIDTH + 10, 10, 480, SCREEN_HEIGHT)
+        self.setGeometry(GAME_WIDTH + 10, 10, 380, SCREEN_HEIGHT)
     
     def run_code(self):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
-        if not os.path.exists("saved_code"):
-            os.makedirs("saved_code")
-        with open(os.path.join("saved_code", "code2_2.txt"), "w") as f:
-            f.write(code)
-        if re.search("for ", code):
-            paradigm_used = True
-        else: paradigm_used = False
         try:
             exec(code, globals())
             if not game_running:
                 screen.bgcolor((255, 205, 178))
                 screen.update()
                 self.ran_into_wall_popup()
-                player.goto(-320 + (12 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
-                player.setheading(90)
-                player.direction = "up" 
+                player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
+                player.setheading(0)
+                player.direction = "right"
             else:
                 if goal_reached():
-                    if paradigm_used:
-                        self.won_popup()
-                    else:
-                        self.goal_no_win_popup()
-                        player.goto(-320 + (12 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
-                        player.setheading(90)
-                        player.direction = "up" 
+                    self.won_popup()
+                elif end_reached():
+                    screen.bgcolor((255, 205, 178))
+                    screen.update()
+                    self.goal_not_reached_popup()
+                    player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
+                    player.setheading(0)
+                    player.direction = "right"
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
-                    player.goto(-320 + (12 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
-                    player.setheading(90)
-                    player.direction = "up" 
+                    player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
+                    player.setheading(0)
+                    player.direction = "right"
         except Exception as e:
             print(e)
 
     def goal_not_reached_popup(self):
         msg = QMessageBox()
         msg.setWindowTitle("Ziel nicht erreicht")
-        msg.setText("Du hast das Ziel leider nicht erreicht. Versuche es nochmal!")
+        msg.setText("Du hast das Ziel leider nicht erreicht. Du musst 2 Münzen sammeln! Versuche es nochmal!")
         msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 
@@ -267,19 +296,12 @@ class CodeEditor(QWidget):
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
         close_button = msg.addButton("Level beenden", QMessageBox.AcceptRole)
 
-        with open("level_2.2.status", "w") as f:
+        with open("level_5.1.status", "w") as f:
             f.write("COMPLETED")
 
         msg.exec_()
         if msg.clickedButton() == close_button:
             sys.exit()
-
-    def goal_no_win_popup(self):
-        msg = QMessageBox()
-        msg.setWindowTitle("Versuche es mit einer For-Schleife")
-        msg.setText("Du hast das Ziel erreicht, aber keine For-Schleife benutzt. Versuche es nochmal!")
-        msg.setStandardButtons(QMessageBox.Retry)
-        x = msg.exec_()
 
 
 # Main game loop:
@@ -299,4 +321,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
