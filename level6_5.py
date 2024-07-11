@@ -141,7 +141,7 @@ def can_move_forward():
     else:
         return False
 
-def is_onCoin():
+def is_on_coin():
     list_label.setText(f"coord_sums = {coord_sums}")
     next_x, next_y = player.position()
     grid_x = round((next_x + 320) / GRID_SIZE)
@@ -234,7 +234,7 @@ class CodeEditor(QWidget):
         self.label.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
         self.label.setWordWrap(True)
         self.textEdit = QTextEdit(self)
-        solution = "while not goal_reached():\n\tif not can_move_forward():\n\t\trotate_left()\n\telse:\n\t\tmove()\n\t\tif is_onCoin():\n\t\t\tcoords = get_position()\n\t\t\tsum = coords[0] + coords[1]\n\t\t\tcoord_sums.append(sum)\n\t\t\tcoord_sums.sort()"
+        solution = "while not goal_reached():\n\tif not can_move_forward():\n\t\trotate_left()\n\telse:\n\t\tmove()\n\t\tif is_on_coin():\n\t\t\tcoords = get_position()\n\t\t\tsum = coords[0] + coords[1]\n\t\t\tcoord_sums.append(sum)\n\t\t\tcoord_sums.sort()"
         if os.path.exists(os.path.join("saved_code", "code6_5.txt")):
             with open(os.path.join("saved_code", "code6_5.txt"), "r") as f:
                 defaultText = f.read()

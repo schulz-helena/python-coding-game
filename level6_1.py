@@ -141,7 +141,7 @@ def can_move_forward():
     else:
         return False
 
-def is_onCoin():
+def is_on_coin():
     list_label.setText(f"coins = {coins}")
     next_x, next_y = player.position()
     grid_x = round((next_x + 320) / GRID_SIZE)
@@ -227,7 +227,7 @@ class CodeEditor(QWidget):
         self.label.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
         self.label.setWordWrap(True)
         self.textEdit = QTextEdit(self)
-        solution = "while not goal_reached():\n\tif is_onCoin():\n\t\tcoins.append(pick_up_coin())\n\tmove()"
+        solution = "while not goal_reached():\n\tif is_on_coin():\n\t\tcoins.append(pick_up_coin())\n\tmove()"
         if os.path.exists(os.path.join("saved_code", "code6_1.txt")):
             with open(os.path.join("saved_code", "code6_1.txt"), "r") as f:
                 defaultText = f.read()

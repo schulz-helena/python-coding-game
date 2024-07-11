@@ -142,7 +142,7 @@ def can_move_forward():
     else:
         return False
 
-def is_onCoin():
+def is_on_coin():
     list_label.setText(f"coins = {coins}")
     next_x, next_y = player.position()
     grid_x = round((next_x + 320) / GRID_SIZE)
