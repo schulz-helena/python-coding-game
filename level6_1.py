@@ -4,6 +4,7 @@ import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox, QLabel
 import re
 import copy
+import os
 
 
 # Setup screen:
@@ -227,7 +228,11 @@ class CodeEditor(QWidget):
         self.label.setWordWrap(True)
         self.textEdit = QTextEdit(self)
         solution = "while not goal_reached():\n\tif is_onCoin():\n\t\tcoins.append(pick_up_coin())\n\tmove()"
-        defaultText = ""
+        if os.path.exists(os.path.join("saved_code", "code6_1.txt")):
+            with open(os.path.join("saved_code", "code6_1.txt"), "r") as f:
+                defaultText = f.read()
+        else:
+            defaultText = ""
         self.textEdit.setPlainText(defaultText)
         self.runButton = QPushButton('Run Code', self)
         self.runButton.clicked.connect(self.run_code)
@@ -254,6 +259,10 @@ class CodeEditor(QWidget):
         global coins
         coins = []
         code = self.textEdit.toPlainText()
+        if not os.path.exists("saved_code"):
+            os.makedirs("saved_code")
+        with open(os.path.join("saved_code", "code6_1.txt"), "w") as f:
+            f.write(code)
         try:
             exec(code, globals())
             if set([1, 2]).issubset(set(coins)) and len(coins) == 2:

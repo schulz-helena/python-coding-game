@@ -4,6 +4,7 @@ import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox, QLabel
 import re
 import copy
+import os
 
 
 # Setup screen:
@@ -234,7 +235,11 @@ class CodeEditor(QWidget):
         self.label.setWordWrap(True)
         self.textEdit = QTextEdit(self)
         solution = "while not goal_reached():\n\tif not can_move_forward():\n\t\trotate_left()\n\telse:\n\t\tmove()\n\t\tif is_onCoin():\n\t\t\tcoords = get_position()\n\t\t\tsum = coords[0] + coords[1]\n\t\t\tcoord_sums.append(sum)\n\t\t\tcoord_sums.sort()"
-        defaultText = ""
+        if os.path.exists(os.path.join("saved_code", "code6_5.txt")):
+            with open(os.path.join("saved_code", "code6_5.txt"), "r") as f:
+                defaultText = f.read()
+        else:
+            defaultText = ""
         self.textEdit.setPlainText(defaultText)
         self.runButton = QPushButton('Run Code', self)
         self.runButton.clicked.connect(self.run_code)
@@ -261,6 +266,10 @@ class CodeEditor(QWidget):
         global coord_sums
         coord_sums = []
         code = self.textEdit.toPlainText()
+        if not os.path.exists("saved_code"):
+            os.makedirs("saved_code")
+        with open(os.path.join("saved_code", "code6_5.txt"), "w") as f:
+            f.write(code)
         try:
             exec(code, globals())
             # Coin coordinates: [8,5] [6,3] [11,6] [3,1] [2,6], Sums: 13 9 17 4 8

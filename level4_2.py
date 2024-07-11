@@ -3,6 +3,7 @@ import turtle
 import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
 import re
+import os
 
 
 # Setup screen:
@@ -177,6 +178,13 @@ class CodeEditor(QWidget):
     
     def initUI(self):
         self.textEdit = QTextEdit(self)
+        solution = ""
+        if os.path.exists(os.path.join("saved_code", "code4_2.txt")):
+            with open(os.path.join("saved_code", "code4_2.txt"), "r") as f:
+                defaultText = f.read()
+        else:
+            defaultText = ""
+        self.textEdit.setPlainText(defaultText)
         self.runButton = QPushButton('Run Code', self)
         self.runButton.clicked.connect(self.run_code)
         
@@ -192,6 +200,10 @@ class CodeEditor(QWidget):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
+        if not os.path.exists("saved_code"):
+            os.makedirs("saved_code")
+        with open(os.path.join("saved_code", "code4_2.txt"), "w") as f:
+            f.write(code)
         if re.search("if ", code):
             paradigm_used = True
         else: paradigm_used = False
