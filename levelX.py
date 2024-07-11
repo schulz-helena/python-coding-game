@@ -2,7 +2,9 @@ import sys
 import turtle
 import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
+import re
 import random
+
 
 # Setup screen:
 SCREEN_WIDTH = 800
@@ -25,7 +27,7 @@ maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -49,7 +51,6 @@ def replace_zeros_with_negatives(maze, count):
 
 
 def draw_maze(maze):
-    turtle.clear()
     turtle.speed(0)
     turtle.penup()
     for y in range(len(maze)):
@@ -59,6 +60,17 @@ def draw_maze(maze):
             if maze[y][x] == 1:
                 turtle.goto(screen_x, screen_y)
                 turtle.color((229, 152, 155))
+                turtle.pendown()
+                turtle.begin_fill()
+                turtle.pencolor((150,150,150))
+                for _ in range(4):
+                    turtle.forward(GRID_SIZE)
+                    turtle.right(90)
+                turtle.end_fill()
+                turtle.penup()
+            if maze[y][x] == 0:
+                turtle.goto(screen_x, screen_y)
+                turtle.color((255, 205, 178))
                 turtle.pendown()
                 turtle.begin_fill()
                 turtle.pencolor((150,150,150))
@@ -86,10 +98,10 @@ def draw_maze(maze):
                 turtle.circle(GRID_SIZE / 4)
                 turtle.end_fill()
                 turtle.penup()
-    turtle.hideturtle()
 
-mazeWithNegatives = replace_zeros_with_negatives(maze, 2)
-draw_maze(mazeWithNegatives)
+    turtle.hideturtle()
+maze = replace_zeros_with_negatives(maze, 2)
+draw_maze(maze)
 
 
 # Setup player:
@@ -113,15 +125,27 @@ def update_screen():
     time.sleep(0.5)
 
 
+def is_onCoin():
+    next_x, next_y = player.position()
+    grid_x = int((next_x + 320) / GRID_SIZE)
+    grid_y = int((260 - next_y) / GRID_SIZE)
+    if maze[grid_y][grid_x] == -1:
+        return True
+
+def handle_coin_collection():
+    next_x, next_y = player.position()
+    grid_x = int((next_x + 320) / GRID_SIZE)
+    grid_y = int((260 - next_y) / GRID_SIZE)
+    if maze[grid_y][grid_x] == -1:
+        maze[grid_y][grid_x] = 0
+        draw_maze(maze)
+        print("Coin collected!")
+
+
+
 # Functions that are usable in code editor:
 def goal_reached():
-    global collected
-    if collected == 2:
-        return True
     
-    return False
-
-def end_reached():
     next_x, next_y = player.position()
     grid_x = int((next_x + 320) / GRID_SIZE)
     grid_y = int((260 - next_y) / GRID_SIZE)
@@ -147,12 +171,14 @@ def can_move_forward():
 
     # Ensure grid coordinates are within the maze boundaries
     if 0 <= grid_x < len(maze[0]) and 0 <= grid_y < len(maze):
-        return maze[grid_y][grid_x] == 0 or maze[grid_y][grid_x] == 3 or maze[grid_y][grid_x] == -1
+        return maze[grid_y][grid_x] == 0 or maze[grid_y][grid_x] == 3
     else:
         return False
 
+
 def move():
     global game_running
+
     if game_running:
         if can_move_forward():
             player.forward(GRID_SIZE)
@@ -162,6 +188,7 @@ def move():
 
 def rotate_left():
     global game_running
+
     if game_running:
         if player.direction == "up":
             player.direction = "left"
@@ -182,6 +209,7 @@ def rotate_left():
 
 def rotate_right():
     global game_running
+
     if game_running:
         if player.direction == "up":
             player.direction = "right"
@@ -200,30 +228,7 @@ def rotate_right():
             player.setheading(90)
             update_screen()
 
-global collected
-collected = 0
 
-
-def collect_coin():
-    next_x, next_y = player.position()
-    grid_x = int((next_x + 320) / GRID_SIZE)
-    grid_y = int((260 - next_y) / GRID_SIZE)
-    if maze[grid_y][grid_x] == -1:
-        maze[grid_y][grid_x] = 0
-        draw_maze(mazeWithNegatives)
-        global collected
-        collected += 1
-        update_screen()
-        
-
-
-def is_onCoin():
-    next_x, next_y = player.position()
-    grid_x = int((next_x + 320) / GRID_SIZE)
-    grid_y = int((260 - next_y) / GRID_SIZE)
-    if maze[grid_y][grid_x] == -1:
-        return True
-    
 # PyQt5 Application with code editor window:
 class CodeEditor(QWidget):
     def __init__(self):
@@ -247,6 +252,9 @@ class CodeEditor(QWidget):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
+        if re.search("if ", code):
+            paradigm_used = True
+        else: paradigm_used = False
         try:
             exec(code, globals())
             if not game_running:
@@ -258,14 +266,13 @@ class CodeEditor(QWidget):
                 player.direction = "right"
             else:
                 if goal_reached():
-                    self.won_popup()
-                elif end_reached():
-                    screen.bgcolor((255, 205, 178))
-                    screen.update()
-                    self.goal_not_reached_popup()
-                    player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
-                    player.setheading(0)
-                    player.direction = "right"
+                    if paradigm_used:
+                        self.won_popup()
+                    else:
+                        self.goal_no_win_popup()
+                        player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
+                        player.setheading(0)
+                        player.direction = "right"
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
@@ -279,7 +286,7 @@ class CodeEditor(QWidget):
     def goal_not_reached_popup(self):
         msg = QMessageBox()
         msg.setWindowTitle("Ziel nicht erreicht")
-        msg.setText("Du hast das Ziel leider nicht erreicht. Du musst 2 Münzen sammeln! Versuche es nochmal!")
+        msg.setText("Du hast das Ziel leider nicht erreicht. Versuche es nochmal!")
         msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 
@@ -302,6 +309,13 @@ class CodeEditor(QWidget):
         msg.exec_()
         if msg.clickedButton() == close_button:
             sys.exit()
+    
+    def goal_no_win_popup(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("Versuche es mit einem If-Else-Block")
+        msg.setText("Du hast das Ziel erreicht, aber keinen If-Else-Block benutzt. Versuche es nochmal!")
+        msg.setStandardButtons(QMessageBox.Retry)
+        x = msg.exec_()
 
 
 # Main game loop:
@@ -321,3 +335,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    

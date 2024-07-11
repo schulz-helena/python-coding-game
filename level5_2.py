@@ -11,7 +11,7 @@ GAME_WIDTH = 800
 GRID_SIZE = 50
 
 screen = turtle.Screen()
-screen.title("Level 5.1")
+screen.title("Level 5.2")
 screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
 screen.colormode(255)
 screen.tracer(0)
@@ -21,15 +21,15 @@ screen.bgcolor((255, 205, 178))
 # Setup and draw maze:
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, -1, 1, 0, 1, -1, 1, 0, -1, 0, 0, 1, -1, 1],
+    [1, 0, -1, 0, 1, 0, 0, 0, 1, 1, 0, -1, 0, 1],
+    [1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+    [1, -1, 1, 0, 1, 0, -1, 1, 0, -1, 1, -1, 0, 1],
+    [1, 1, 1, 0, 1, -1, 0, -1, 0, 0, 1, 0, -1, 1],
+    [1, -1, 0, -1, 1, -1, 0, -1, 1, 0, 1, 1, 0, 1],
+    [1, -1, 1, 1, 1, 1, 1, 1, 1, 0, 1, -1, 0, 1],
+    [1, 0, 1, -1, 0, -1, 0, 0, 0, 0, 1, 0, 3, 1],
+    [1, 0, 0, 0, -1, 1, 1, -1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 
@@ -88,8 +88,7 @@ def draw_maze(maze):
                 turtle.penup()
     turtle.hideturtle()
 
-mazeWithNegatives = replace_zeros_with_negatives(maze, 2)
-draw_maze(mazeWithNegatives)
+draw_maze(maze)
 
 
 # Setup player:
@@ -99,9 +98,9 @@ player.shapesize(1.5)
 player.color((120, 150, 100))
 player.penup()
 player.speed(0)
-player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
-player.setheading(0)
-player.direction = "right" 
+player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))
+player.setheading(270)
+player.direction = "down" 
 
 
 # Helper variables and functions:
@@ -110,18 +109,11 @@ game_running = True
 def update_screen():
     screen.bgcolor((255, 205, 178))
     screen.update()
-    time.sleep(0.5)
+    time.sleep(0.1)
 
 
 # Functions that are usable in code editor:
 def goal_reached():
-    global collected
-    if collected == 2:
-        return True
-    
-    return False
-
-def end_reached():
     next_x, next_y = player.position()
     grid_x = int((next_x + 320) / GRID_SIZE)
     grid_y = int((260 - next_y) / GRID_SIZE)
@@ -129,6 +121,7 @@ def end_reached():
         return True
     
     return False
+
 
 def can_move_forward():
     next_x, next_y = player.position()
@@ -210,7 +203,7 @@ def collect_coin():
     grid_y = int((260 - next_y) / GRID_SIZE)
     if maze[grid_y][grid_x] == -1:
         maze[grid_y][grid_x] = 0
-        draw_maze(mazeWithNegatives)
+        draw_maze(maze)
         global collected
         collected += 1
         update_screen()
@@ -259,13 +252,6 @@ class CodeEditor(QWidget):
             else:
                 if goal_reached():
                     self.won_popup()
-                elif end_reached():
-                    screen.bgcolor((255, 205, 178))
-                    screen.update()
-                    self.goal_not_reached_popup()
-                    player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
-                    player.setheading(0)
-                    player.direction = "right"
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
@@ -273,13 +259,14 @@ class CodeEditor(QWidget):
                     player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                     player.setheading(0)
                     player.direction = "right"
+    
         except Exception as e:
             print(e)
 
     def goal_not_reached_popup(self):
         msg = QMessageBox()
         msg.setWindowTitle("Ziel nicht erreicht")
-        msg.setText("Du hast das Ziel leider nicht erreicht. Du musst 2 Münzen sammeln! Versuche es nochmal!")
+        msg.setText("Du hast das Ziel leider nicht erreicht.")
         msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 
@@ -293,7 +280,7 @@ class CodeEditor(QWidget):
     def won_popup(self):
         msg = QMessageBox()
         msg.setWindowTitle("Gewonnen")
-        msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
+        msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft! Du hast " + str(collected) + " Münzen gesammelt!")
         close_button = msg.addButton("Level beenden", QMessageBox.AcceptRole)
 
         with open("level_5.1.status", "w") as f:
