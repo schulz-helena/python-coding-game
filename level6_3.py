@@ -324,8 +324,14 @@ class CodeEditor(QWidget):
         msg = QMessageBox()
         msg.setWindowTitle("Gewonnen")
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
-        msg.setStandardButtons(QMessageBox.Ok)
-        x = msg.exec_()
+        close_button = msg.addButton("Level beenden", QMessageBox.AcceptRole)
+
+        with open("level_6.3.status", "w") as f:
+            f.write("COMPLETED")
+
+        msg.exec_()
+        if msg.clickedButton() == close_button:
+            sys.exit()
     
     def goal_no_win_popup(self):
         msg = QMessageBox()
