@@ -1,4 +1,13 @@
 
+coins = 0
+while coins != 2:
+	if(is_on_coin()):
+		collect_coin()
+		coins += 1
+	move()
+
+
+
 
 collect_coin()
     
@@ -16,7 +25,7 @@ while not goal_reached():
 while not check_goal():
 
 	collect_coin()
-	
+
 	rotate_right()
 
 

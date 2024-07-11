@@ -16,11 +16,6 @@ status_files = [
     "level_6.1.status", "level_6.2.status", "level_6.3.status", "level_6.4.status"," level_6.5.status"
 ]
 
-# Function to delete status files
-def delete_status_files():
-    for status_file in status_files:
-        if os.path.exists(status_file):
-            os.remove(status_file)
 
 # Function to handle the completion of a script by checking the status file
 def check_script_status(script_name, status_file, check_label):
@@ -95,9 +90,9 @@ def create_script_control_frame(level_name, script_path, status_file):
 
     check_label = tk.Label(frame, text="", fg="green")
     check_label.pack(side=tk.LEFT, padx=10)
+    
+    check_script_status(script_path, status_file, check_label)
 
-# Delete all status files at the start#
-#delete_status_files()
 
 # Create control frames for each level
 create_script_control_frame("Level 1.1", "level1_1.py", "level_1.1.status")

@@ -208,7 +208,7 @@ def collect_coin():
         
 
 
-def is_onCoin():
+def is_on_coin():
     next_x, next_y = player.position()
     grid_x = int((next_x + 320) / GRID_SIZE)
     grid_y = int((260 - next_y) / GRID_SIZE)
