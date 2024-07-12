@@ -14,7 +14,7 @@ GRID_SIZE = 50
 
 screen = turtle.Screen()
 screen.title("Level 5.1")
-screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
+screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT, 20, 20)
 screen.colormode(255)
 screen.tracer(0)
 screen.bgcolor((255, 205, 178)) 
@@ -296,9 +296,11 @@ class CodeEditor(QWidget):
                 player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                 player.setheading(0)
                 player.direction = "right"
+                screen.update()
             else:
                 if goal_reached():
                     self.won_popup()
+                    screen.update()
                 elif end_reached():
                     screen.bgcolor((255, 205, 178))
                     screen.update()
@@ -306,6 +308,7 @@ class CodeEditor(QWidget):
                     player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                     player.setheading(0)
                     player.direction = "right"
+                    screen.update()
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
@@ -313,6 +316,7 @@ class CodeEditor(QWidget):
                     player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                     player.setheading(0)
                     player.direction = "right"
+                    screen.update()
         except Exception as e:
             print(e)
 
@@ -357,6 +361,11 @@ class CodeEditor(QWidget):
 
 
 # Main game loop:
+def update_loop():
+	while True:
+		screen.update()
+		main()
+		
 def main():
     screen.listen()
 
@@ -364,12 +373,8 @@ def main():
     editor = CodeEditor()
     editor.show()
 
-    running = True
-    while running:
-        screen.update()
-    
-    turtle.done()
     sys.exit(app.exec_())
 
+
 if __name__ == "__main__":
-    main()
+	update_loop()

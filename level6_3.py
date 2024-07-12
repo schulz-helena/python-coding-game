@@ -15,7 +15,7 @@ GRID_SIZE = 50
 
 screen = turtle.Screen()
 screen.title("Level 6.3")
-screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
+screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT, 20, 20)
 screen.colormode(255)
 screen.tracer(0)
 screen.bgcolor((255, 205, 178)) 
@@ -301,6 +301,7 @@ class CodeEditor(QWidget):
                 player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
                 player.setheading(0)
                 player.direction = "right"
+                screen.update()
                 draw_maze(original_maze)
                 maze = copy.deepcopy(original_maze)
                 self.label2.setText("coins = []")
@@ -308,12 +309,14 @@ class CodeEditor(QWidget):
                 if goal_reached():
                     if paradigm_used:
                         self.won_popup()
+                        screen.update()
                     else:
                         self.label2.setText(f"coins = {coins}")
                         self.goal_no_win_popup()
                         player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
                         player.setheading(0)
                         player.direction = "right"
+                        screen.update()
                         draw_maze(original_maze)
                         maze = copy.deepcopy(original_maze)
                         self.label2.setText("coins = []")
@@ -325,6 +328,7 @@ class CodeEditor(QWidget):
                     player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
                     player.setheading(0)
                     player.direction = "right"
+                    screen.update()
                     draw_maze(original_maze)
                     maze = copy.deepcopy(original_maze)
                     self.label2.setText("coins = []")
@@ -379,6 +383,11 @@ class CodeEditor(QWidget):
 
 
 # Main game loop:
+def update_loop():
+	while True:
+		screen.update()
+		main()
+		
 def main():
     screen.listen()
 
@@ -386,13 +395,8 @@ def main():
     editor = CodeEditor()
     editor.show()
 
-    running = True
-    while running:
-        screen.update()
-    
-    turtle.done()
     sys.exit(app.exec_())
 
+
 if __name__ == "__main__":
-    main()
-    
+	update_loop()

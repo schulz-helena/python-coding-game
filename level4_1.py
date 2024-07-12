@@ -234,6 +234,7 @@ class CodeEditor(QWidget):
                 if goal_reached():
                     if paradigm_used:
                         self.won_popup()
+                        screen.update()
                     else:
                         self.goal_no_win_popup()
                         player.goto(-320 + (1 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
