@@ -35,6 +35,7 @@ maze = [
     [1, 0, 0, 0, -1, 1, 1, -1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
+original_maze = copy.deepcopy(maze)
 
 def replace_zeros_with_negatives(maze, count):
     # Find all positions of 0 in the maze
@@ -274,6 +275,8 @@ class CodeEditor(QWidget):
     
     def run_code(self):
         global game_running
+        global maze
+        global collected
         game_running = True
         code = self.textEdit.toPlainText()
         original_code = copy.deepcopy(code)
@@ -292,6 +295,10 @@ class CodeEditor(QWidget):
                 player.setheading(270)
                 player.direction = "down" 
                 screen.update()
+                draw_maze(original_maze)
+                maze = copy.deepcopy(original_maze)
+                collected = 0
+                screen.update()
             else:
                 if goal_reached():
                     self.won_popup()
@@ -303,6 +310,10 @@ class CodeEditor(QWidget):
                     player.goto(-320 + (1 * GRID_SIZE), 260 - (1 * GRID_SIZE))
                     player.setheading(270)
                     player.direction = "down" 
+                    screen.update()
+                    draw_maze(original_maze)
+                    maze = copy.deepcopy(original_maze)
+                    collected = 0
                     screen.update()
     
         except Exception as e:

@@ -114,6 +114,7 @@ def draw_maze(maze):
     turtle.hideturtle()
 
 mazeWithNegatives = replace_zeros_with_negatives(maze, 2)
+originalMazeWithNegatives = copy.deepcopy(mazeWithNegatives)
 draw_maze(mazeWithNegatives)
 
 
@@ -235,7 +236,7 @@ def collect_coin():
     grid_y = round((260 - next_y) / GRID_SIZE)
     if maze[grid_y][grid_x] == -1:
         maze[grid_y][grid_x] = 0
-        draw_maze(mazeWithNegatives)
+        draw_maze(maze)
         global collected
         collected += 1
         update_screen()
@@ -280,7 +281,9 @@ class CodeEditor(QWidget):
         self.setGeometry(GAME_WIDTH + 10, 10, 480, SCREEN_HEIGHT)
     
     def run_code(self):
+        global maze
         global game_running
+        global collected
         game_running = True
         code = self.textEdit.toPlainText()
         original_code = copy.deepcopy(code)
@@ -299,6 +302,10 @@ class CodeEditor(QWidget):
                 player.setheading(0)
                 player.direction = "right"
                 screen.update()
+                draw_maze(originalMazeWithNegatives)
+                maze = copy.deepcopy(originalMazeWithNegatives)
+                collected = 0
+                screen.update()
             else:
                 if goal_reached():
                     self.won_popup()
@@ -311,6 +318,10 @@ class CodeEditor(QWidget):
                     player.setheading(0)
                     player.direction = "right"
                     screen.update()
+                    draw_maze(originalMazeWithNegatives)
+                    maze = copy.deepcopy(originalMazeWithNegatives)
+                    collected = 0
+                    screen.update()
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
@@ -318,6 +329,10 @@ class CodeEditor(QWidget):
                     player.goto(-320 + (3 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                     player.setheading(0)
                     player.direction = "right"
+                    screen.update()
+                    draw_maze(originalMazeWithNegatives)
+                    maze = copy.deepcopy(originalMazeWithNegatives)
+                    collected = 0
                     screen.update()
         except Exception as e:
             print(e)
