@@ -4,6 +4,7 @@ import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox, QLabel
 import random
 import os
+import re
 
 # Setup screen:
 SCREEN_WIDTH = 800
@@ -281,6 +282,7 @@ class CodeEditor(QWidget):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
+        code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
         with open(os.path.join("saved_code", "code5_1.txt"), "w") as f:
@@ -313,6 +315,18 @@ class CodeEditor(QWidget):
                     player.direction = "right"
         except Exception as e:
             print(e)
+
+    def insert_break_statement(self, code):
+        pattern = re.compile(r'(while[^\n]*)(\n\t*)')
+        
+        def replacement(match):
+            while_statement = match.group(1) # While until newline 
+            newline_tabs = match.group(2) # Pattern for \n\t plus 0 or arbitrary many \t
+            insertion = f'{newline_tabs}if not game_running:break{newline_tabs}'
+            return f'{while_statement}{newline_tabs}{insertion}'
+        
+        result = re.sub(pattern, replacement, code)
+        return result
 
     def goal_not_reached_popup(self):
         msg = QMessageBox()

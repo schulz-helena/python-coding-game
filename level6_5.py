@@ -290,6 +290,7 @@ class CodeEditor(QWidget):
         global coord_sums
         coord_sums = []
         code = self.textEdit.toPlainText()
+        code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
         with open(os.path.join("saved_code", "code6_5.txt"), "w") as f:
@@ -337,6 +338,18 @@ class CodeEditor(QWidget):
                     self.label2.setText("coord_sums = []")
         except Exception as e:
             print(e)
+
+    def insert_break_statement(self, code):
+        pattern = re.compile(r'(while[^\n]*)(\n\t*)')
+        
+        def replacement(match):
+            while_statement = match.group(1) # While until newline 
+            newline_tabs = match.group(2) # Pattern for \n\t plus 0 or arbitrary many \t
+            insertion = f'{newline_tabs}if not game_running:break{newline_tabs}'
+            return f'{while_statement}{newline_tabs}{insertion}'
+        
+        result = re.sub(pattern, replacement, code)
+        return result
 
     def goal_not_reached_popup(self):
         msg = QMessageBox()
