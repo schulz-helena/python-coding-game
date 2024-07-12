@@ -283,11 +283,12 @@ class CodeEditor(QWidget):
         global coins
         coins = []
         code = self.textEdit.toPlainText()
+        original_code = copy.deepcopy(code)
         code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
         with open(os.path.join("saved_code", "code6_1.txt"), "w") as f:
-            f.write(code)
+            f.write(original_code)
         try:
             exec(code, globals())
             if set([1, 2]).issubset(set(coins)) and len(coins) == 2:

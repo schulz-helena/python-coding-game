@@ -4,6 +4,7 @@ import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
 import re
 import os
+import copy
 
 
 # Setup screen:
@@ -212,11 +213,12 @@ class CodeEditor(QWidget):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
+        original_code = copy.deepcopy(code)
         code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
         with open(os.path.join("saved_code", "code2_1.txt"), "w") as f:
-            f.write(code)
+            f.write(original_code)
         if re.search("for ", code):
             paradigm_used = True
         else: paradigm_used = False

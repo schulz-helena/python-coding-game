@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPush
 import random
 import os
 import re
+import copy
 
 # Setup screen:
 SCREEN_WIDTH = 800
@@ -275,11 +276,12 @@ class CodeEditor(QWidget):
         global game_running
         game_running = True
         code = self.textEdit.toPlainText()
+        original_code = copy.deepcopy(code)
         code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
         with open(os.path.join("saved_code", "code5_2.txt"), "w") as f:
-            f.write(code)
+            f.write(original_code)
         try:
             exec(code, globals())
             if not game_running:

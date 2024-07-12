@@ -287,11 +287,12 @@ class CodeEditor(QWidget):
         global smallestCoin
         smallestCoin = None
         code = self.textEdit.toPlainText()
+        original_code = copy.deepcopy(code)
         code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
         with open(os.path.join("saved_code", "code6_4.txt"), "w") as f:
-            f.write(code)
+            f.write(original_code)
         try:
             exec(code, globals())
             if smallestCoin == 1:

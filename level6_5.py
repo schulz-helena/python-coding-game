@@ -290,11 +290,12 @@ class CodeEditor(QWidget):
         global coord_sums
         coord_sums = []
         code = self.textEdit.toPlainText()
+        original_code = copy.deepcopy(code)
         code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
         with open(os.path.join("saved_code", "code6_5.txt"), "w") as f:
-            f.write(code)
+            f.write(original_code)
         try:
             exec(code, globals())
             # Coin coordinates: [8,5] [6,3] [11,6] [3,1] [2,6], Sums: 13 9 17 4 8
