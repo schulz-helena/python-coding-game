@@ -13,7 +13,7 @@ GAME_WIDTH = 800
 GRID_SIZE = 50
 
 screen = turtle.Screen()
-screen.title("Level 5.2")
+screen.title("Bonuslevel")
 screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
 screen.colormode(255)
 screen.tracer(0)

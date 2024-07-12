@@ -4,7 +4,6 @@ import time
 from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
 import os
 import re
-import threading
 
 
 # Setup screen:

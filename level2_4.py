@@ -14,7 +14,7 @@ GRID_SIZE = 50
 
 screen = turtle.Screen()
 screen.title("Level 2.4")
-screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT)
+screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT, 20, 20)
 screen.colormode(255)
 screen.tracer(0)
 screen.bgcolor((255, 205, 178)) 
@@ -228,23 +228,27 @@ class CodeEditor(QWidget):
                 self.ran_into_wall_popup()
                 player.goto(-320 + (0 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
                 player.setheading(270)
-                player.direction = "down" 
+                player.direction = "down"
+                screen.update() 
             else:
                 if goal_reached():
                     if paradigm_used:
                         self.won_popup()
+                        screen.update()
                     else:
                         self.goal_no_win_popup()
                         player.goto(-320 + (0 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
                         player.setheading(270)
                         player.direction = "down" 
+                        screen.update()
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
                     player.goto(-320 + (0 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
                     player.setheading(270)
-                    player.direction = "down"  
+                    player.direction = "down" 
+                    screen.update() 
         except Exception as e:
             print(e)
 
@@ -294,22 +298,25 @@ class CodeEditor(QWidget):
         msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 
-
+def update_loop():
+	while True:
+		screen.update()
+		main()
+		
 # Main game loop:
 def main():
+
     screen.listen()
 
     app = QApplication(sys.argv)
     editor = CodeEditor()
     editor.show()
 
-    running = True
-    while running:
-        screen.update()
-    
-    turtle.done()
+
+    #app.exec_()
+
     sys.exit(app.exec_())
 
+
 if __name__ == "__main__":
-    main()
-    
+	update_loop()

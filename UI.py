@@ -107,12 +107,12 @@ create_script_control_frame("Level 3.2", "level3_2.py", "level_3.2.status")
 create_script_control_frame("Level 4.1", "level4_1.py", "level_4.1.status")
 create_script_control_frame("Level 4.2", "level4_2.py", "level_4.2.status")
 create_script_control_frame("Level 5.1", "level5_1.py", "level_5.1.status")
-create_script_control_frame("Level 5.2", "level5_2.py", "level_5.2.status")
 create_script_control_frame("Level 6.1", "level6_1.py", "level_6.1.status")
 create_script_control_frame("Level 6.2", "level6_2.py", "level_6.2.status")
 create_script_control_frame("Level 6.3", "level6_3.py", "level_6.3.status")
 create_script_control_frame("Level 6.4", "level6_4.py", "level_6.4.status")
 create_script_control_frame("Level 6.5", "level6_5.py", "level_6.5.status")
+create_script_control_frame("Bonuslevel", "level5_2.py", "level_5.2.status")
 
 # Run the Tkinter event loop
 root.mainloop()
