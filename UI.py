@@ -32,7 +32,7 @@ def check_script_status(script_name, status_file, check_label):
 def start_script(script_name, status_file, check_label):
     if script_name not in processes or processes[script_name].poll() is not None:
         check_label.config(text="")  # Clear the check mark when restarting
-        processes[script_name] = subprocess.Popen(["python", script_name])
+        processes[script_name] = subprocess.Popen(["python3", script_name])
         print("Info", f"Started {script_name}")
         # Start checking the script status
         root.after(1000, lambda: check_script_status(script_name, status_file, check_label))
