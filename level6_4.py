@@ -249,7 +249,7 @@ class CodeEditor(QWidget):
     def initUI(self):
         global list_label
         self.label = QLabel(self)
-        self.label.setText("Speichere die kleinste Münze in der Variable, bevor du das Ziel erreichst!")
+        self.label.setText("Speichere die kleinste Münze in der Variable smallestCoin, bevor du das Ziel erreichst!")
         self.label.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
         self.label.setWordWrap(True)
         self.textEdit = QTextEdit(self)

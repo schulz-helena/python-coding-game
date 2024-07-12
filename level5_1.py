@@ -1,7 +1,7 @@
 import sys
 import turtle
 import time
-from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QApplication, QTextEdit, QVBoxLayout, QWidget, QPushButton, QMessageBox, QLabel
 import random
 import os
 
@@ -254,6 +254,10 @@ class CodeEditor(QWidget):
         self.initUI()
     
     def initUI(self):
+        self.label = QLabel(self)
+        self.label.setText("Sammle 2 Münzen ein! Das Zielfeld muss nicht erreicht werden.")
+        self.label.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
+        self.label.setWordWrap(True)
         self.textEdit = QTextEdit(self)
         if os.path.exists(os.path.join("saved_code", "code5_1.txt")):
             with open(os.path.join("saved_code", "code5_1.txt"), "r") as f:
@@ -265,6 +269,7 @@ class CodeEditor(QWidget):
         self.runButton.clicked.connect(self.run_code)
         
         layout = QVBoxLayout()
+        layout.addWidget(self.label)
         layout.addWidget(self.textEdit)
         layout.addWidget(self.runButton)
         self.setLayout(layout)
