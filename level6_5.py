@@ -123,7 +123,7 @@ player.direction = "right"
 # Helper variables and functions:
 game_running = True
 coord_sums = []
-list_label = None
+#list_label = None
 
 def update_screen():
     screen.bgcolor((255, 205, 178))
@@ -133,7 +133,7 @@ def update_screen():
 
 # Functions that are usable in code editor:
 def goal_reached():
-    list_label.setText(f"coord_sums = {coord_sums}")
+    #list_label.setText(f"coord_sums = {coord_sums}")
     next_x, next_y = player.position()
     # Convert floating-point position to grid coordinates
     grid_x = round((next_x + 320) / GRID_SIZE)
@@ -144,7 +144,7 @@ def goal_reached():
     return False
 
 def can_move_forward():
-    list_label.setText(f"coord_sums = {coord_sums}")
+    #list_label.setText(f"coord_sums = {coord_sums}")
     next_x, next_y = player.position()
     if player.direction == "up":
         next_y += GRID_SIZE
@@ -166,7 +166,7 @@ def can_move_forward():
         return False
 
 def is_on_coin():
-    list_label.setText(f"coord_sums = {coord_sums}")
+    #list_label.setText(f"coord_sums = {coord_sums}")
     next_x, next_y = player.position()
     grid_x = round((next_x + 320) / GRID_SIZE)
     grid_y = round((260 - next_y) / GRID_SIZE)
@@ -175,7 +175,7 @@ def is_on_coin():
     return False
 
 def pick_up_coin():
-    list_label.setText(f"coord_sums = {coord_sums}")
+    #list_label.setText(f"coord_sums = {coord_sums}")
     next_x, next_y = player.position()
     grid_x = round((next_x + 320) / GRID_SIZE)
     grid_y = round((260 - next_y) / GRID_SIZE)
@@ -186,14 +186,14 @@ def pick_up_coin():
         return coin_id
     
 def get_position():
-    list_label.setText(f"coord_sums = {coord_sums}")
+    #list_label.setText(f"coord_sums = {coord_sums}")
     next_x, next_y = player.position()
     grid_x = round((next_x + 320) / GRID_SIZE)
     grid_y = round((260 - next_y) / GRID_SIZE)
     return [grid_x, grid_y]
     
 def move():
-    list_label.setText(f"coord_sums = {coord_sums}")
+    #list_label.setText(f"coord_sums = {coord_sums}")
     global game_running
     if game_running:
         if can_move_forward():
@@ -203,7 +203,7 @@ def move():
             game_running = False
 
 def rotate_left():
-    list_label.setText(f"coord_sums = {coord_sums}")
+    #list_label.setText(f"coord_sums = {coord_sums}")
     global game_running
     if game_running:
         if player.direction == "up":
@@ -224,7 +224,7 @@ def rotate_left():
             update_screen()
 
 def rotate_right():
-    list_label.setText(f"coord_sums = {coord_sums}")
+    #list_label.setText(f"coord_sums = {coord_sums}")
     global game_running
     if game_running:
         if player.direction == "up":
@@ -252,9 +252,9 @@ class CodeEditor(QWidget):
         self.initUI()
     
     def initUI(self):
-        global list_label
+        #global list_label
         self.label = QLabel(self)
-        self.label.setText("Füge die Summe der Koordinaten jeder der Münzen zur Liste hinzu und sortiere sie aufsteigend, bevor du das Ziel erreichst!")
+        self.label.setText("Füge die Summe der Koordinaten jeder der Münzen zur Liste coord_sums hinzu und sortiere sie aufsteigend, bevor du das Ziel erreichst!")
         self.label.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
         self.label.setWordWrap(True)
         self.textEdit = QTextEdit(self)
@@ -267,16 +267,16 @@ class CodeEditor(QWidget):
         self.textEdit.setPlainText(defaultText)
         self.runButton = QPushButton('Run Code', self)
         self.runButton.clicked.connect(self.run_code)
-        self.label2 = QLabel(self)
-        self.label2.setText("coord_sums = []")
-        self.label2.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
-        self.label2.setWordWrap(True)
-        list_label = self.label2
+        #self.label2 = QLabel(self)
+        #self.label2.setText("coord_sums = []")
+        #self.label2.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
+        #self.label2.setWordWrap(True)
+        #list_label = self.label2
         
         layout = QVBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(self.textEdit)
-        layout.addWidget(self.label2)
+        #layout.addWidget(self.label2)
         layout.addWidget(self.runButton)
         self.setLayout(layout)
         
@@ -303,7 +303,7 @@ class CodeEditor(QWidget):
                 paradigm_used = True
             else: paradigm_used = False
             if not game_running:
-                self.label2.setText(f"coord_sums = {coord_sums}")
+                #self.label2.setText(f"coord_sums = {coord_sums}")
                 screen.bgcolor((255, 205, 178))
                 screen.update()
                 self.ran_into_wall_popup()
@@ -313,14 +313,15 @@ class CodeEditor(QWidget):
                 screen.update()
                 draw_maze(original_maze)
                 maze = copy.deepcopy(original_maze)
-                self.label2.setText("coord_sums = []")
+                #self.label2.setText("coord_sums = []")
+                screen.update()
             else:
                 if goal_reached():
                     if paradigm_used:
                         self.won_popup()
                         screen.update()
                     else:
-                        self.label2.setText(f"coord_sums = {coord_sums}")
+                        #self.label2.setText(f"coord_sums = {coord_sums}")
                         self.goal_no_win_popup()
                         player.goto(-320 + (6 * GRID_SIZE), 260 - (5 * GRID_SIZE))   
                         player.setheading(0)
@@ -328,9 +329,10 @@ class CodeEditor(QWidget):
                         screen.update()
                         draw_maze(original_maze)
                         maze = copy.deepcopy(original_maze)
-                        self.label2.setText("coord_sums = []")
+                        #self.label2.setText("coord_sums = []")
+                        screen.update()
                 else:
-                    self.label2.setText(f"coord_sums = {coord_sums}")
+                    #self.label2.setText(f"coord_sums = {coord_sums}")
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
@@ -340,7 +342,8 @@ class CodeEditor(QWidget):
                     screen.update()
                     draw_maze(original_maze)
                     maze = copy.deepcopy(original_maze)
-                    self.label2.setText("coord_sums = []")
+                    #self.label2.setText("coord_sums = []")
+                    screen.update()
         except Exception as e:
             print(e)
 
