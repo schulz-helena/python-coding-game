@@ -337,11 +337,7 @@ class CodeEditor(QWidget):
         msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 
-def update_loop():
-	while True:
-		screen.update()
-		main()
-		
+
 # Main game loop:
 def main():
 
@@ -351,11 +347,14 @@ def main():
     editor = CodeEditor()
     editor.show()
 
-
-    #app.exec_()
-
+    running = True
+    while running:
+        screen.update()
+    
+    turtle.done()
     sys.exit(app.exec_())
 
 
 if __name__ == "__main__":
-	update_loop()
+	main()
+    

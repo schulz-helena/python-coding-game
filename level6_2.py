@@ -423,20 +423,22 @@ class CodeEditor(QWidget):
 
 
 # Main game loop:
-def update_loop():
-	while True:
-		screen.update()
-		main()
-		
 def main():
+
     screen.listen()
 
     app = QApplication(sys.argv)
     editor = CodeEditor()
     editor.show()
 
+    running = True
+    while running:
+        screen.update()
+    
+    turtle.done()
     sys.exit(app.exec_())
 
 
 if __name__ == "__main__":
-	update_loop()
+	main()
+    
