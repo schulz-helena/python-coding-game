@@ -15,7 +15,7 @@ GAME_WIDTH = 800
 GRID_SIZE = 50
 
 screen = turtle.Screen()
-screen.title("Level 1.1")
+screen.title("Level 1.3")
 screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT, 20, 20)
 screen.colormode(255)
 screen.tracer(0)
@@ -28,10 +28,10 @@ maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 0, 0, 0, 3, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -192,9 +192,9 @@ class CodeEditor(QWidget):
     
     def initUI(self):
         self.textEdit = QTextEdit(self)
-        solution = "move()\nmove()\nmove()"
-        if os.path.exists(os.path.join("saved_code", "code1_1.txt")):
-            with open(os.path.join("saved_code", "code1_1.txt"), "r") as f:
+        solution = "move()\nrotate_left()\nmove()\nrotate_right()\nmove()\nmove()\nrotate_right()\nmove()\nmove()\nrotate_right()\nmove()\nrotate_left()\nmove()"
+        if os.path.exists(os.path.join("saved_code", "code1_3.txt")):
+            with open(os.path.join("saved_code", "code1_3.txt"), "r") as f:
                 defaultText = f.read()
         else:
             defaultText = ""
@@ -218,7 +218,7 @@ class CodeEditor(QWidget):
         code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
-        with open(os.path.join("saved_code", "code1_1.txt"), "w") as f:
+        with open(os.path.join("saved_code", "code1_3.txt"), "w") as f:
             f.write(original_code)
         try:
             exec(code, globals())
@@ -313,7 +313,7 @@ class CodeEditor(QWidget):
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
         close_button = msg.addButton("Level beenden", QMessageBox.AcceptRole)
 
-        with open("level_1.1.status", "w") as f:
+        with open(os.path.join("status", "level_1.3.status"), "w") as f:
             f.write("COMPLETED")
 
         msg.exec_()
@@ -340,4 +340,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-    

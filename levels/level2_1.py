@@ -15,7 +15,7 @@ GAME_WIDTH = 800
 GRID_SIZE = 50
 
 screen = turtle.Screen()
-screen.title("Level 3.2")
+screen.title("Level 2.1")
 screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT, 20, 20)
 screen.colormode(255)
 screen.tracer(0)
@@ -25,15 +25,15 @@ screen.bgcolor((255, 205, 178))
 # Setup and draw maze:
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 
@@ -89,7 +89,7 @@ player.shapesize(1.5)
 player.color((120, 150, 100))
 player.penup()
 player.speed(0)
-player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+player.goto(-320 + (1 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
 player.setheading(0)
 player.direction = "right" 
 
@@ -192,9 +192,9 @@ class CodeEditor(QWidget):
     
     def initUI(self):
         self.textEdit = QTextEdit(self)
-        solution = "while not goal_reached():\n\trotate_left()\n\tmove()\n\trotate_right()\n\tmove()"
-        if os.path.exists(os.path.join("saved_code", "code3_2.txt")):
-            with open(os.path.join("saved_code", "code3_2.txt"), "r") as f:
+        solution = "for i in range(11):\n\tmove()"
+        if os.path.exists(os.path.join("saved_code", "code2_1.txt")):
+            with open(os.path.join("saved_code", "code2_1.txt"), "r") as f:
                 defaultText = f.read()
         else:
             defaultText = ""
@@ -218,9 +218,9 @@ class CodeEditor(QWidget):
         code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
-        with open(os.path.join("saved_code", "code3_2.txt"), "w") as f:
+        with open(os.path.join("saved_code", "code2_1.txt"), "w") as f:
             f.write(original_code)
-        if re.search("while ", code):
+        if re.search("for ", code):
             paradigm_used = True
         else: paradigm_used = False
         try:
@@ -229,9 +229,9 @@ class CodeEditor(QWidget):
                 screen.bgcolor((255, 205, 178))
                 screen.update()
                 self.ran_into_wall_popup()
-                player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                player.goto(-320 + (1 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                 player.setheading(0)
-                player.direction = "right" 
+                player.direction = "right"
                 screen.update()
             else:
                 if goal_reached():
@@ -240,17 +240,17 @@ class CodeEditor(QWidget):
                         screen.update()
                     else:
                         self.goal_no_win_popup()
-                        player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                        player.goto(-320 + (1 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                         player.setheading(0)
-                        player.direction = "right" 
+                        player.direction = "right"
                         screen.update()
                 else:
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
-                    player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                    player.goto(-320 + (1 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                     player.setheading(0)
-                    player.direction = "right" 
+                    player.direction = "right"
                     screen.update()
         except Exception as e:
             print(e)
@@ -323,7 +323,7 @@ class CodeEditor(QWidget):
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
         close_button = msg.addButton("Level beenden", QMessageBox.AcceptRole)
 
-        with open("level_3.2.status", "w") as f:
+        with open(os.path.join("status", "level_2.1.status"), "w") as f:
             f.write("COMPLETED")
 
         msg.exec_()
@@ -332,8 +332,8 @@ class CodeEditor(QWidget):
     
     def goal_no_win_popup(self):
         msg = QMessageBox()
-        msg.setWindowTitle("Versuche es mit einer While-Schleife")
-        msg.setText("Du hast das Ziel erreicht, aber keine While-Schleife benutzt. Versuche es nochmal!")
+        msg.setWindowTitle("Versuche es mit einer For-Schleife")
+        msg.setText("Du hast das Ziel erreicht, aber keine For-Schleife benutzt. Versuche es nochmal!")
         msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 

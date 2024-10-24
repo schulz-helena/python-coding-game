@@ -5,6 +5,12 @@ Dabei steuern die TeilnehmerInnen den Spieler mit ihrem selbstgeschriebenen Code
 Begleitend gibt es eine PowerPoint-Präsentation, in der wir vor jeder Phase ein neues Programmier-Konzept erklären.
 Diese Präsentation enthält außerdem eine Musterlösung für alle Level.
 
+## Get started
+Der gesamte Code und die Präsentation liegen in diesem Repository.
+Es kann gecloned, oder einfach als zip heruntergeladen werden.
+Um das Bearbeiten der Level zu starten, bitte UI.py starten. 
+Es erscheint ein Fenster, über das die einzelnen Level gestartet werden können.
+Wurde ein Level erfolgreich bearbeitet, erscheint ein Haken hinter dem Level.
 
 ## Phasen
 ### Phase 1 (level1_x)

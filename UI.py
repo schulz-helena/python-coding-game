@@ -8,12 +8,24 @@ processes = {}
 
 # List of status files
 status_files = [
-    "level_1.1.status", "level_1.2.status", "level_1.3.status",
-    "level_2.1.status", "level_2.2.status", "level_2.3.status", "level_2.4.status",
-    "level_3.1.status", "level_3.2.status",
-    "level_4.1.status", "level_4.2.status", 
-    "level_5.1.status", "level_5.2.status",
-    "level_6.1.status", "level_6.2.status", "level_6.3.status", "level_6.4.status"," level_6.5.status"
+    os.path.join("status", "level_1.1.status"), 
+    os.path.join("status", "level_1.2.status"), 
+    os.path.join("status", "level_1.3.status"),
+    os.path.join("status", "level_2.1.status"), 
+    os.path.join("status", "level_2.2.status"), 
+    os.path.join("status", "level_2.3.status"),
+    os.path.join("status", "level_2.4.status"),
+    os.path.join("status", "level_3.1.status"), 
+    os.path.join("status", "level_3.2.status"),
+    os.path.join("status", "level_4.1.status"), 
+    os.path.join("status", "level_4.2.status"), 
+    os.path.join("status", "level_5.1.status"),
+    os.path.join("status", "level_6.1.status"),
+    os.path.join("status", "level_6.2.status"),
+    os.path.join("status", "level_6.3.status"), 
+    os.path.join("status", "level_6.4.status"),
+    os.path.join("status", "level_6.5.status"),
+    os.path.join("status", "level_bonus.status")
 ]
 
 
@@ -95,24 +107,24 @@ def create_script_control_frame(level_name, script_path, status_file):
 
 
 # Create control frames for each level
-create_script_control_frame("Level 1.1", "level1_1.py", "level_1.1.status")
-create_script_control_frame("Level 1.2", "level1_2.py", "level_1.2.status")
-create_script_control_frame("Level 1.3", "level1_3.py", "level_1.3.status")
-create_script_control_frame("Level 2.1", "level2_1.py", "level_2.1.status")
-create_script_control_frame("Level 2.2", "level2_2.py", "level_2.2.status")
-create_script_control_frame("Level 2.3", "level2_3.py", "level_2.3.status")
-create_script_control_frame("Level 2.4", "level2_4.py", "level_2.4.status")
-create_script_control_frame("Level 3.1", "level3_1.py", "level_3.1.status")
-create_script_control_frame("Level 3.2", "level3_2.py", "level_3.2.status")
-create_script_control_frame("Level 4.1", "level4_1.py", "level_4.1.status")
-create_script_control_frame("Level 4.2", "level4_2.py", "level_4.2.status")
-create_script_control_frame("Level 5.1", "level5_1.py", "level_5.1.status")
-create_script_control_frame("Level 6.1", "level6_1.py", "level_6.1.status")
-create_script_control_frame("Level 6.2", "level6_2.py", "level_6.2.status")
-create_script_control_frame("Level 6.3", "level6_3.py", "level_6.3.status")
-create_script_control_frame("Level 6.4", "level6_4.py", "level_6.4.status")
-create_script_control_frame("Level 6.5", "level6_5.py", "level_6.5.status")
-create_script_control_frame("Bonuslevel", "level5_2.py", "level_5.2.status")
+create_script_control_frame("Level 1.1", os.path.join("levels", "level1_1.py"), os.path.join("status", "level_1.1.status"))
+create_script_control_frame("Level 1.2", os.path.join("levels", "level1_2.py"), os.path.join("status", "level_1.2.status"))
+create_script_control_frame("Level 1.3", os.path.join("levels", "level1_3.py"), os.path.join("status", "level_1.3.status"))
+create_script_control_frame("Level 2.1", os.path.join("levels", "level2_1.py"), os.path.join("status", "level_2.1.status"))
+create_script_control_frame("Level 2.2", os.path.join("levels", "level2_2.py"), os.path.join("status", "level_2.2.status"))
+create_script_control_frame("Level 2.3", os.path.join("levels", "level2_3.py"), os.path.join("status", "level_2.3.status"))
+create_script_control_frame("Level 2.4", os.path.join("levels", "level2_4.py"), os.path.join("status", "level_2.4.status"))
+create_script_control_frame("Level 3.1", os.path.join("levels", "level3_1.py"), os.path.join("status", "level_3.1.status"))
+create_script_control_frame("Level 3.2", os.path.join("levels", "level3_2.py"), os.path.join("status", "level_3.2.status"))
+create_script_control_frame("Level 4.1", os.path.join("levels", "level4_1.py"), os.path.join("status", "level_4.1.status"))
+create_script_control_frame("Level 4.2", os.path.join("levels", "level4_2.py"), os.path.join("status", "level_4.2.status"))
+create_script_control_frame("Level 5.1", os.path.join("levels", "level5_1.py"), os.path.join("status", "level_5.1.status"))
+create_script_control_frame("Level 6.1", os.path.join("levels", "level6_1.py"), os.path.join("status", "level_6.1.status"))
+create_script_control_frame("Level 6.2", os.path.join("levels", "level6_2.py"), os.path.join("status", "level_6.2.status"))
+create_script_control_frame("Level 6.3", os.path.join("levels", "level6_3.py"), os.path.join("status", "level_6.3.status"))
+create_script_control_frame("Level 6.4", os.path.join("levels", "level6_4.py"), os.path.join("status", "level_6.4.status"))
+create_script_control_frame("Level 6.5", os.path.join("levels", "level6_5.py"), os.path.join("status", "level_6.5.status"))
+create_script_control_frame("Bonuslevel", os.path.join("levels", "level_bonus.py"), os.path.join("status", "level_bonus.status"))
 
 # Run the Tkinter event loop
 root.mainloop()

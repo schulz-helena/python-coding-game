@@ -15,7 +15,7 @@ GAME_WIDTH = 800
 GRID_SIZE = 50
 
 screen = turtle.Screen()
-screen.title("Level 6.3")
+screen.title("Level 6.5")
 screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT, 20, 20)
 screen.colormode(255)
 screen.tracer(0)
@@ -25,15 +25,15 @@ screen.bgcolor((255, 205, 178))
 # Setup and draw maze:
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, -2, 3, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, -6, 0, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, -7, 0, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, -4, 0, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, -1, 0, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, -5, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, -8, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, -3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 0, -4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+    [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1],
+    [1, 1, 0, 1, 0, 0, -2, 0, 0, 0, 1, 0, 1, 1],
+    [1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1],
+    [1, 1, 0, 1, 0, 1, 0, 0, -1, 0, 1, 0, 1, 1],
+    [1, 1, -5, 1, 0, 1, 1, 1, 1, 1, 1, -3, 1, 1],
+    [1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
     [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ]
 original_maze = copy.deepcopy(maze)
@@ -116,14 +116,14 @@ player.shapesize(1.5)
 player.color((120, 150, 100))
 player.penup()
 player.speed(0)
-player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+player.goto(-320 + (6 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
 player.setheading(0)
 player.direction = "right" 
 
 
 # Helper variables and functions:
 game_running = True
-coins = []
+coord_sums = []
 list_label = None
 
 def update_screen():
@@ -134,7 +134,7 @@ def update_screen():
 
 # Functions that are usable in code editor:
 def goal_reached():
-    list_label.setText(f"coins = {coins}")
+    list_label.setText(f"coord_sums = {coord_sums}")
     next_x, next_y = player.position()
     # Convert floating-point position to grid coordinates
     grid_x = round((next_x + 320) / GRID_SIZE)
@@ -145,7 +145,7 @@ def goal_reached():
     return False
 
 def can_move_forward():
-    list_label.setText(f"coins = {coins}")
+    list_label.setText(f"coord_sums = {coord_sums}")
     next_x, next_y = player.position()
     if player.direction == "up":
         next_y += GRID_SIZE
@@ -167,7 +167,7 @@ def can_move_forward():
         return False
 
 def is_on_coin():
-    list_label.setText(f"coins = {coins}")
+    list_label.setText(f"coord_sums = {coord_sums}")
     next_x, next_y = player.position()
     grid_x = round((next_x + 320) / GRID_SIZE)
     grid_y = round((260 - next_y) / GRID_SIZE)
@@ -176,7 +176,7 @@ def is_on_coin():
     return False
 
 def pick_up_coin():
-    list_label.setText(f"coins = {coins}")
+    list_label.setText(f"coord_sums = {coord_sums}")
     next_x, next_y = player.position()
     grid_x = round((next_x + 320) / GRID_SIZE)
     grid_y = round((260 - next_y) / GRID_SIZE)
@@ -186,8 +186,15 @@ def pick_up_coin():
         draw_maze(maze)
         return coin_id
     
+def get_position():
+    list_label.setText(f"coord_sums = {coord_sums}")
+    next_x, next_y = player.position()
+    grid_x = round((next_x + 320) / GRID_SIZE)
+    grid_y = round((260 - next_y) / GRID_SIZE)
+    return [grid_x, grid_y]
+    
 def move():
-    list_label.setText(f"coins = {coins}")
+    list_label.setText(f"coord_sums = {coord_sums}")
     global game_running
     if game_running:
         if can_move_forward():
@@ -197,7 +204,7 @@ def move():
             game_running = False
 
 def rotate_left():
-    list_label.setText(f"coins = {coins}")
+    list_label.setText(f"coord_sums = {coord_sums}")
     global game_running
     if game_running:
         if player.direction == "up":
@@ -218,7 +225,7 @@ def rotate_left():
             update_screen()
 
 def rotate_right():
-    list_label.setText(f"coins = {coins}")
+    list_label.setText(f"coord_sums = {coord_sums}")
     global game_running
     if game_running:
         if player.direction == "up":
@@ -248,13 +255,13 @@ class CodeEditor(QWidget):
     def initUI(self):
         global list_label
         self.label = QLabel(self)
-        self.label.setText("Füge alle Münzen der Liste coins hinzu und sortiere sie aufsteigend, bevor du das Ziel erreichst!")
+        self.label.setText("Füge die Summe der Koordinaten jeder der Münzen zur Liste coord_sums hinzu und sortiere sie aufsteigend, bevor du das Ziel erreichst!")
         self.label.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
         self.label.setWordWrap(True)
         self.textEdit = QTextEdit(self)
-        solution = "while not goal_reached():\n\trotate_left()\n\tmove()\n\tcoins.append(pick_up_coin())\n\tcoins.sort()\n\trotate_right()\n\tmove()"
-        if os.path.exists(os.path.join("saved_code", "code6_3.txt")):
-            with open(os.path.join("saved_code", "code6_3.txt"), "r") as f:
+        solution = "while not goal_reached():\n\tif not can_move_forward():\n\t\trotate_left()\n\telse:\n\t\tmove()\n\t\tif is_on_coin():\n\t\t\tcoords = get_position()\n\t\t\tsum = coords[0] + coords[1]\n\t\t\tcoord_sums.append(sum)\n\t\t\tcoord_sums.sort()"
+        if os.path.exists(os.path.join("saved_code", "code6_5.txt")):
+            with open(os.path.join("saved_code", "code6_5.txt"), "r") as f:
                 defaultText = f.read()
         else:
             defaultText = ""
@@ -262,7 +269,7 @@ class CodeEditor(QWidget):
         self.runButton = QPushButton('Run Code', self)
         self.runButton.clicked.connect(self.run_code)
         self.label2 = QLabel(self)
-        self.label2.setText("coins = []")
+        self.label2.setText("coord_sums = []")
         self.label2.setStyleSheet("font-weight: bold; color: rgb(229, 152, 155)")
         self.label2.setWordWrap(True)
         list_label = self.label2
@@ -281,32 +288,33 @@ class CodeEditor(QWidget):
         global maze
         global game_running
         game_running = True
-        global coins
-        coins = []
+        global coord_sums
+        coord_sums = []
         code = self.textEdit.toPlainText()
         original_code = copy.deepcopy(code)
         code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
-        with open(os.path.join("saved_code", "code6_3.txt"), "w") as f:
+        with open(os.path.join("saved_code", "code6_5.txt"), "w") as f:
             f.write(original_code)
         try:
             exec(code, globals())
-            if coins == [1, 2, 3, 4, 5, 6, 7, 8]:
+            # Coin coordinates: [8,5] [6,3] [11,6] [3,1] [2,6], Sums: 13 9 17 4 8
+            if coord_sums == [4, 8, 9, 13, 17]:
                 paradigm_used = True
             else: paradigm_used = False
             if not game_running:
-                self.label2.setText(f"coins = {coins}")
+                self.label2.setText(f"coord_sums = {coord_sums}")
                 screen.bgcolor((255, 205, 178))
                 screen.update()
                 self.ran_into_wall_popup()
-                player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                player.goto(-320 + (6 * GRID_SIZE), 260 - (5 * GRID_SIZE)) 
                 player.setheading(0)
                 player.direction = "right"
                 screen.update()
                 draw_maze(original_maze)
                 maze = copy.deepcopy(original_maze)
-                self.label2.setText("coins = []")
+                self.label2.setText("coord_sums = []")
                 screen.update()
             else:
                 if goal_reached():
@@ -314,28 +322,28 @@ class CodeEditor(QWidget):
                         self.won_popup()
                         screen.update()
                     else:
-                        self.label2.setText(f"coins = {coins}")
+                        self.label2.setText(f"coord_sums = {coord_sums}")
                         self.goal_no_win_popup()
-                        player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                        player.goto(-320 + (6 * GRID_SIZE), 260 - (5 * GRID_SIZE))   
                         player.setheading(0)
                         player.direction = "right"
                         screen.update()
                         draw_maze(original_maze)
                         maze = copy.deepcopy(original_maze)
-                        self.label2.setText("coins = []")
+                        self.label2.setText("coord_sums = []")
                         screen.update()
                 else:
-                    self.label2.setText(f"coins = {coins}")
+                    self.label2.setText(f"coord_sums = {coord_sums}")
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
-                    player.goto(-320 + (2 * GRID_SIZE), 260 - (9 * GRID_SIZE))  
+                    player.goto(-320 + (6 * GRID_SIZE), 260 - (5 * GRID_SIZE))   
                     player.setheading(0)
                     player.direction = "right"
                     screen.update()
                     draw_maze(original_maze)
                     maze = copy.deepcopy(original_maze)
-                    self.label2.setText("coins = []")
+                    self.label2.setText("coord_sums = []")
                     screen.update()
         except Exception as e:
             print(e)
@@ -408,7 +416,7 @@ class CodeEditor(QWidget):
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
         close_button = msg.addButton("Level beenden", QMessageBox.AcceptRole)
 
-        with open("level_6.3.status", "w") as f:
+        with open(os.path.join("status", "level_6.5.status"), "w") as f:
             f.write("COMPLETED")
 
         msg.exec_()
@@ -417,8 +425,8 @@ class CodeEditor(QWidget):
     
     def goal_no_win_popup(self):
         msg = QMessageBox()
-        msg.setWindowTitle("Nicht alle Münzen eingesammelt")
-        msg.setText("Du hast das Ziel erreicht, aber es waren entweder nicht alle Münzen in der Liste, oder es waren zu viele Elemente in der Liste. Versuche es nochmal!")
+        msg.setWindowTitle("Koordinaten-Summen sind nicht richtig sortiert")
+        msg.setText("Du hast das Ziel erreicht, aber deine Liste von Koordinaten-Summen ist nicht korrekt. Versuche es nochmal!")
         msg.setStandardButtons(QMessageBox.Retry)
         x = msg.exec_()
 

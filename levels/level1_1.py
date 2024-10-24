@@ -15,7 +15,7 @@ GAME_WIDTH = 800
 GRID_SIZE = 50
 
 screen = turtle.Screen()
-screen.title("Level 1.2")
+screen.title("Level 1.1")
 screen.setup(SCREEN_WIDTH, SCREEN_HEIGHT, 20, 20)
 screen.colormode(255)
 screen.tracer(0)
@@ -28,9 +28,9 @@ maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 3, 0, 0, 0, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 0, 0, 0, 3, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -89,7 +89,7 @@ player.shapesize(1.5)
 player.color((120, 150, 100))
 player.penup()
 player.speed(0)
-player.goto(-320 + (5 * GRID_SIZE), 260 - (4 * GRID_SIZE))  
+player.goto(-320 + (5 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
 player.setheading(0)
 player.direction = "right" 
 
@@ -133,6 +133,7 @@ def can_move_forward():
         return maze[grid_y][grid_x] == 0 or maze[grid_y][grid_x] == 3
     else:
         return False
+    
 def move():
     global game_running
     if game_running:
@@ -191,9 +192,9 @@ class CodeEditor(QWidget):
     
     def initUI(self):
         self.textEdit = QTextEdit(self)
-        solution = "move()\nmove()\nmove()\nrotate_right()\nmove()\nmove()\nrotate_right()\nmove()\nmove()\nmove()"
-        if os.path.exists(os.path.join("saved_code", "code1_2.txt")):
-            with open(os.path.join("saved_code", "code1_2.txt"), "r") as f:
+        solution = "move()\nmove()\nmove()"
+        if os.path.exists(os.path.join("saved_code", "code1_1.txt")):
+            with open(os.path.join("saved_code", "code1_1.txt"), "r") as f:
                 defaultText = f.read()
         else:
             defaultText = ""
@@ -217,7 +218,7 @@ class CodeEditor(QWidget):
         code = self.insert_break_statement(code)
         if not os.path.exists("saved_code"):
             os.makedirs("saved_code")
-        with open(os.path.join("saved_code", "code1_2.txt"), "w") as f:
+        with open(os.path.join("saved_code", "code1_1.txt"), "w") as f:
             f.write(original_code)
         try:
             exec(code, globals())
@@ -225,7 +226,7 @@ class CodeEditor(QWidget):
                 screen.bgcolor((255, 205, 178))
                 screen.update()
                 self.ran_into_wall_popup()
-                player.goto(-320 + (5 * GRID_SIZE), 260 - (4 * GRID_SIZE))  
+                player.goto(-320 + (5 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                 player.setheading(0)
                 player.direction = "right"
                 screen.update()
@@ -237,7 +238,7 @@ class CodeEditor(QWidget):
                     screen.bgcolor((255, 205, 178))
                     screen.update()
                     self.goal_not_reached_popup()
-                    player.goto(-320 + (5 * GRID_SIZE), 260 - (4 * GRID_SIZE))  
+                    player.goto(-320 + (5 * GRID_SIZE), 260 - (5 * GRID_SIZE))  
                     player.setheading(0)
                     player.direction = "right"
                     screen.update()
@@ -312,7 +313,7 @@ class CodeEditor(QWidget):
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
         close_button = msg.addButton("Level beenden", QMessageBox.AcceptRole)
 
-        with open("level_1.2.status", "w") as f:
+        with open(os.path.join("status", "level_1.1.status"), "w") as f:
             f.write("COMPLETED")
 
         msg.exec_()
