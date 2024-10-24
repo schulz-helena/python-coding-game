@@ -313,6 +313,8 @@ class CodeEditor(QWidget):
         msg.setText("Herzlichen Glückwunsch, du hast das Level geschafft!")
         close_button = msg.addButton("Level beenden", QMessageBox.AcceptRole)
 
+        if not os.path.exists("status"):
+            os.makedirs("status")
         with open(os.path.join("status", "level_1.3.status"), "w") as f:
             f.write("COMPLETED")
 
